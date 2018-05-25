@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Hemo.Models
 {
-    public class UsersDonationTracking
+    public class UsersDonationTracking : IDataItem
     {
         public UsersDonationTracking()
         {

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Hemo.Models
 {
-    public class User
+    public class User : IDataItem
     {
         private ICollection<DonationsRequest> donationsRequests;
 

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Hemo.Models
 {
-    public class Donator
+    public class Donator : IDataItem
     {
         public Donator()
         {

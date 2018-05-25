@@ -63,6 +63,11 @@
     <Compile Include="Factories\IDonationsRequestsFactory.cs" />
     <Compile Include="HemoContext.cs" />
     <Compile Include="HemoData.cs" />
+    <Compile Include="Managers\DonationsCentersManager.cs" />
+    <Compile Include="Managers\DonationsRequestsManager.cs" />
+    <Compile Include="Managers\UsersDonationTrackingsManager.cs" />
+    <Compile Include="Managers\DonatorsManager.cs" />
+    <Compile Include="Managers\UsersManager.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -76,8 +81,6 @@
       <Name>Hemo.Models</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Managers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

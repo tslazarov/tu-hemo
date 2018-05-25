@@ -8,7 +8,7 @@ namespace Hemo.Data.Contracts
 
         IQueryable<T> All();
 
-        void Add(T entity);
+        void Create(T entity);
 
         void Update(T entity);
 

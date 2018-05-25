@@ -32,7 +32,7 @@ namespace Hemo.Data
             return this.dbSet.Find(id);
         }
 
-        public void Add(T entity)
+        public void Create(T entity)
         {
             DbEntityEntry entry = this.AttachEntry(entity);
             entry.State = EntityState.Added;
