@@ -1,27 +1,24 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http;
 
 namespace Hemo
 {
     public static class WebApiConfig
     {
-        public static void Register(HttpConfiguration configuration)
+        public static void Register(HttpConfiguration config)
         {
-            //// Web API configuration and services
-            //var config = new HttpConfiguration();
-            //config.Formatters.Remove(config.Formatters.XmlFormatter);
+            // Web API configuration and services
 
-            //// Web API routes
-            //config.MapHttpAttributeRoutes();
+            // Web API routes
+            config.MapHttpAttributeRoutes();
 
-            ////config.EnableCors(new EnableCorsAttribute("https://localhost:44300, http://localhost:21575, http://localhost:37045, http://localhost:37046, https://localhost:44301", "accept, authorization", "GET", "WWW-Authenticate"));
-
-            //config.Routes.MapHttpRoute(
-            //    name: "DefaultApi",
-            //    routeTemplate: "{controller}",
-            //    defaults: new { id = RouteParameter.Optional }
-            //);
-
-            //return config;
+            config.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "api/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
         }
     }
 }
