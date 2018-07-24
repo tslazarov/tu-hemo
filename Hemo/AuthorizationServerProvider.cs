@@ -1,4 +1,6 @@
-﻿using Microsoft.Owin.Security.OAuth;
+﻿using Hemo.Extensions;
+using Microsoft.Owin;
+using Microsoft.Owin.Security.OAuth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,11 @@ namespace Hemo
 {
     public class AuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
+        public AuthorizationServerProvider()
+        {
+
+        }
+
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
             context.Validated();
@@ -19,6 +26,8 @@ namespace Hemo
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
+
+            var parameters = context.Request.GetBodyParameters();
 
             // TODO: Implement actual authentication logic
             if(context.UserName == "admin" && context.Password == "admin")

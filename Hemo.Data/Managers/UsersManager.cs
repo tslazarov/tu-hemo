@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Hemo.Data.Managers
 {
-    public class UsersManager : IManager
+    public class UsersManager : IUsersManager, IManager
     {
         private readonly IData data;
 

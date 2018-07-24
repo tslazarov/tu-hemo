@@ -20,13 +20,24 @@ namespace Hemo
             OAuthAuthorizationServerOptions options = new OAuthAuthorizationServerOptions()
             {
                 AllowInsecureHttp = true,
-                TokenEndpointPath = new PathString("/token"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
-                Provider = new AuthorizationServerProvider()
+                TokenEndpointPath = new PathString("/authorize"),
+                AccessTokenExpireTimeSpan = TimeSpan.FromHours(1),
+                Provider = new AuthorizationServerProvider(),
+                
             };
 
             app.UseOAuthAuthorizationServer(options);
-            app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
+            app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions()
+            {
+                Provider = new OAuthBearerAuthenticationProvider()
+                {
+                    OnRequestToken = context =>
+                    {
+
+                        return Task.FromResult<object>(null);
+                    }
+                }
+            });
 
             HttpConfiguration config = new HttpConfiguration();
             WebApiConfig.Register(config);

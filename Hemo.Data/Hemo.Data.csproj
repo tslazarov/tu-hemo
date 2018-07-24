@@ -65,6 +65,11 @@
     <Compile Include="HemoData.cs" />
     <Compile Include="Managers\DonationsCentersManager.cs" />
     <Compile Include="Managers\DonationsRequestsManager.cs" />
+    <Compile Include="Contracts\IDonationsCentersManager.cs" />
+    <Compile Include="Contracts\IDonationsRequestsManager.cs" />
+    <Compile Include="Contracts\IDonatorsManager.cs" />
+    <Compile Include="Contracts\IUsersDonationTrackingsManager.cs" />
+    <Compile Include="Contracts\IUsersManager.cs" />
     <Compile Include="Managers\UsersDonationTrackingsManager.cs" />
     <Compile Include="Managers\DonatorsManager.cs" />
     <Compile Include="Managers\UsersManager.cs" />

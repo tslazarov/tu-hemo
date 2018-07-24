@@ -5,7 +5,7 @@ using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace Hemo.Data
 {
-    class HemoContext : DbContext, IContext
+    public class HemoContext : DbContext, IContext
     {
         public HemoContext() : base("Hemo")
         {
