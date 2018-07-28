@@ -13,12 +13,13 @@ namespace Hemo.Models
         {
         }
 
-        public User(Guid id, string email, string firstName, string lastName)
+        public User(Guid id, string email, string firstName, string lastName, bool isExternal)
         {
             this.Id = id;
             this.Email = email;
             this.FirstName = firstName;
             this.LastName = lastName;
+            this.IsExternal = isExternal;
             this.DonationsRequests = new List<DonationsRequest>();
         }
 
@@ -40,12 +41,10 @@ namespace Hemo.Models
         [MaxLength(30)]
         public string LastName { get; set; }
 
-        [Required]
         public string Salt { get; set; }
 
         public int Age { get; set; }
 
-        [Required]
         public string HashedPassword { get; set; }
 
         public BloodType BloodType { get; set; }
@@ -53,6 +52,8 @@ namespace Hemo.Models
         public string PhoneNumber { get; set; }
 
         public string Image { get; set; }
+
+        public bool IsExternal { get; set; }
 
         public Guid TrackingId { get; set; }
 

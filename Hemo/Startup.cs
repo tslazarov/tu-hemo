@@ -22,8 +22,7 @@ namespace Hemo
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/authorize"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromHours(1),
-                Provider = new AuthorizationServerProvider(),
-                
+                Provider = new AuthorizationServerProvider(), 
             };
 
             app.UseOAuthAuthorizationServer(options);
