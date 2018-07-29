@@ -1,9 +1,16 @@
-﻿using Hemo.Extensions;
+﻿using Bytes2you.Validation;
+using Hemo.Data.Contracts;
+using Hemo.Extensions;
+using Hemo.Models;
+using Hemo.Utilities;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.OAuth;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -12,15 +19,20 @@ namespace Hemo
 {
     public class AuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
-        public AuthorizationServerProvider()
-        {
+        private IManager usersManager;
 
+        public AuthorizationServerProvider(IUsersManager usersManager)
+        {
+            Guard.WhenArgument<IUsersManager>(usersManager, "Users manager cannot be null.")
+                .IsNull()
+                .Throw();
+
+            this.usersManager = usersManager as IManager;
         }
 
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
             context.Validated();
-            //return base.ValidateClientAuthentication(context);
         }
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
@@ -29,17 +41,61 @@ namespace Hemo
 
             var parameters = context.Request.GetBodyParameters();
 
-            // TODO: Implement actual authentication logic
-            if(context.UserName == "admin" && context.Password == "admin")
+            IEnumerable<User> users = this.usersManager.GetItems() as IEnumerable<User>;
+
+            User user = users.FirstOrDefault(u => u.Email == context.UserName);
+
+            if (user != null)
             {
-                identity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
-                identity.AddClaim(new Claim(ClaimTypes.Email, "admin@mail.com"));
-                identity.AddClaim(new Claim(ClaimTypes.Name, "Admin"));
-                context.Validated(identity);
+                if (!parameters.ContainsKey("external"))
+                {
+                    var hashedPassword = PasswordHelper.CreatePasswordHash(context.Password, user.Salt);
+
+                    if (user.HashedPassword == hashedPassword)
+                    {
+                        identity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
+                        identity.AddClaim(new Claim(ClaimTypes.Email, user.Email));
+                        identity.AddClaim(new Claim(ClaimTypes.Name, string.Format("{0} {1}", user.FirstName, user.LastName)));
+                        // add additional claims if needed
+                        context.Validated(identity);
+                    }
+                    else
+                    {
+                        context.SetError("invalid_grant", "Provided username or password is incorrect");
+                    }
+                }
+                else
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(Constants.FacebookGraphAPIBaseUrl);
+
+                        var response = await client.GetAsync(Constants.FacebookGraphAPIMeEndpoint + parameters["access_token"]);
+                        var content = await response.Content.ReadAsStringAsync();
+
+                        if(response.StatusCode == HttpStatusCode.OK)
+                        {
+                            var contentResponse = JsonConvert.DeserializeObject<FacebookModel>(content);
+
+                            if (user.UserExternalId == contentResponse.Id)
+                            {
+                                identity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
+                                identity.AddClaim(new Claim(ClaimTypes.Email, user.Email));
+                                identity.AddClaim(new Claim(ClaimTypes.Name, string.Format("{0} {1}", user.FirstName, user.LastName)));
+                                // add additional claims if needed
+                                context.Validated(identity);
+                            }
+                            else
+                            {
+                                context.SetError("invalid_grant", "Facebook authorization failed");
+                            }
+                        }
+                    }
+                }
             }
             else
             {
-                context.SetError("invalid_grant", "Provided username and password is incorrect");
+                context.SetError("invalid_grant", "Provided username or password is incorrect");
             }
         }
     }

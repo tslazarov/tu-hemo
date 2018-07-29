@@ -31,6 +31,7 @@ namespace Hemo.Data
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
             modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
 
+            Database.SetInitializer<HemoContext>(null);
             base.OnModelCreating(modelBuilder);
         }
 

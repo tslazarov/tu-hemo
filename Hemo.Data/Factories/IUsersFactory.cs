@@ -5,6 +5,6 @@ namespace Hemo.Data.Factories
 {
     public interface IUsersFactory
     {
-        User Create(Guid id, string email);
+        User Create(Guid id, string email, string firstName, string lastName, bool isExternal);
     }
 }

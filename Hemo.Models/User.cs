@@ -55,7 +55,7 @@ namespace Hemo.Models
 
         public bool IsExternal { get; set; }
 
-        public Guid TrackingId { get; set; }
+        public string UserExternalId { get; set; }
 
         public virtual UsersDonationTracking Tracking { get; set; }
 

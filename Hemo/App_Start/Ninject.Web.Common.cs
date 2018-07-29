@@ -16,6 +16,14 @@ namespace Hemo.App_Start
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
 
+        public static Bootstrapper Bootstrapper
+        {
+            get
+            {
+                return bootstrapper;
+            }
+        }
+
         /// <summary>
         /// Starts the application
         /// </summary>

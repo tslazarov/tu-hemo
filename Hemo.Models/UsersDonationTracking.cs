@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Hemo.Models
 {
@@ -16,6 +17,7 @@ namespace Hemo.Models
         }
 
         [Key]
+        [ForeignKey("User")]
         public Guid Id { get; set; }
 
         public DateTime? LastDonation { get; set; }
@@ -23,5 +25,7 @@ namespace Hemo.Models
         public int CurrentAnnualDonations { get; set; }
 
         public int MaxAnnualDonations { get; set; }
+
+        public User User { get; set; }
     }
 }
