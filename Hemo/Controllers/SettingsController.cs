@@ -46,7 +46,7 @@ namespace Hemo.Controllers
         [AcceptVerbs("PUT")]
         [HttpPut]
         [Route("api/settings/changePassword")]
-        public HttpResponseMessage CheckExistingEmail(ChangePasswordModel model)
+        public HttpResponseMessage ChangePassword(ChangePasswordModel model)
         {
             HttpResponseMessage resp = new HttpResponseMessage();
 
@@ -69,14 +69,63 @@ namespace Hemo.Controllers
                     user.Salt = salt;
                     user.HashedPassword = hashedNewPassword;
 
+                    this.usersManager.UpdateItem(user);
                     this.usersManager.SaveChanges();
 
-                    resp.Content = new StringContent(JsonConvert.SerializeObject(true));
+                    resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsChanged = true }));
                     resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 }
                 else
                 {
-                    resp.Content = new StringContent(JsonConvert.SerializeObject(false));
+                    resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsChanged = false, State = "incorrect_password" }));
+                    resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                }
+            }
+
+            return resp;
+        }
+
+        // PUT api/users/exist
+        [Authorize]
+        [AcceptVerbs("PUT")]
+        [HttpPut]
+        [Route("api/settings/changeEmail")]
+        public HttpResponseMessage ChangeEmail(ChangeEmailModel model)
+        {
+            HttpResponseMessage resp = new HttpResponseMessage();
+
+            IEnumerable<User> users = this.usersManager.GetItems() as IEnumerable<User>;
+            IEnumerable<Claim> claims = (HttpContext.Current.User as ClaimsPrincipal).Claims;
+
+            string userEmail = claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(userEmail))
+            {
+                User user = users.Where(u => u.Email == userEmail).FirstOrDefault();
+
+                string hashedPassword = PasswordHelper.CreatePasswordHash(model.Password, user.Salt);
+
+                if (user.HashedPassword == hashedPassword)
+                {
+                    if (users.Where(u => u.Email == model.Email).FirstOrDefault() == null)
+                    {
+                        user.Email = model.Email;
+
+                        this.usersManager.UpdateItem(user);
+                        this.usersManager.SaveChanges();
+
+                        resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel(){ IsChanged = true }));
+                        resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    }
+                    else
+                    {
+                        resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsChanged = false, State = "existing_mail" }));
+                        resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    }
+                }
+                else
+                {
+                    resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsChanged = false, State = "incorrect_password" }));
                     resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 }
             }

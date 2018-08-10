@@ -147,7 +147,7 @@ namespace Hemo.Controllers
 
                 IEnumerable<User> users = ((IManager)this.usersManager).GetItems() as IEnumerable<User>;
 
-                var hemoUser = users.Where(u => u.Email == profile.Email).FirstOrDefault();
+                User hemoUser = users.Where(u => u.Email == profile.Email).FirstOrDefault();
 
                 if(hemoUser != null)
                 {

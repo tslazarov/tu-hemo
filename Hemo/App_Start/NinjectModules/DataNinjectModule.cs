@@ -18,7 +18,7 @@ namespace Hemo.App_Start.NinjectModules
             this.Kernel.Bind(x => x.FromAssemblyContaining<IDataAssembly>().SelectAllClasses().BindDefaultInterface());
 
             this.Rebind<IContext>().To<HemoContext>().InRequestScope();
-            this.Rebind<IData>().To<HemoData>();
+            this.Rebind<IData>().To<HemoData>().InRequestScope();
             this.Bind<IDonationsCentersFactory>().ToFactory();
             this.Bind<IDonationsRequestsFactory>().ToFactory();
             this.Bind<IDonatorsFactory>().ToFactory();

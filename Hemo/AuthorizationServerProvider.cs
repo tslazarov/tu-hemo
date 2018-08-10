@@ -1,4 +1,4 @@
-﻿using Bytes2you.Validation;
+﻿using Hemo.App_Start;
 using Hemo.Data.Contracts;
 using Hemo.Extensions;
 using Hemo.Models;
@@ -18,15 +18,8 @@ namespace Hemo
 {
     public class AuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
-        private IManager usersManager;
-
-        public AuthorizationServerProvider(IUsersManager usersManager)
+        public AuthorizationServerProvider()
         {
-            Guard.WhenArgument<IUsersManager>(usersManager, "Users manager cannot be null.")
-                .IsNull()
-                .Throw();
-
-            this.usersManager = usersManager as IManager;
         }
 
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
@@ -36,11 +29,13 @@ namespace Hemo
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
+            NinjectWrapper wrapper = new NinjectWrapper();
+
             ClaimsIdentity identity = new ClaimsIdentity(context.Options.AuthenticationType);
 
             Dictionary<string,string> parameters = context.Request.GetBodyParameters();
 
-            IEnumerable<User> users = this.usersManager.GetItems() as IEnumerable<User>;
+            IEnumerable<User> users = ((wrapper.UsersManager as IManager).GetItems() as IEnumerable<User>).ToList();
 
             User user = users.FirstOrDefault(u => u.Email == context.UserName);
 
