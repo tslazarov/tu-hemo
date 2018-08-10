@@ -72,12 +72,12 @@ namespace Hemo.Controllers
                     this.usersManager.UpdateItem(user);
                     this.usersManager.SaveChanges();
 
-                    resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsChanged = true }));
+                    resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsSuccessful = true }));
                     resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 }
                 else
                 {
-                    resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsChanged = false, State = "incorrect_password" }));
+                    resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsSuccessful = false, State = "incorrect_password" }));
                     resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 }
             }
@@ -114,18 +114,18 @@ namespace Hemo.Controllers
                         this.usersManager.UpdateItem(user);
                         this.usersManager.SaveChanges();
 
-                        resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel(){ IsChanged = true }));
+                        resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel(){ IsSuccessful = true }));
                         resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                     }
                     else
                     {
-                        resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsChanged = false, State = "existing_mail" }));
+                        resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsSuccessful = false, State = "existing_mail" }));
                         resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                     }
                 }
                 else
                 {
-                    resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsChanged = false, State = "incorrect_password" }));
+                    resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsSuccessful = false, State = "incorrect_password" }));
                     resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 }
             }
@@ -158,12 +158,69 @@ namespace Hemo.Controllers
                     this.usersManager.UpdateItem(user);
                     this.usersManager.SaveChanges();
 
-                    resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsChanged = true }));
+                    resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsSuccessful = true }));
                     resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 }
                 else
                 {
-                    resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsChanged = false, State = "incorrect_password" }));
+                    resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsSuccessful = false }));
+                    resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                }
+            }
+
+            return resp;
+        }
+
+        // PUT api/users/changeLanguage
+        [Authorize]
+        [AcceptVerbs("PUT")]
+        [HttpPut]
+        [Route("api/settings/deleteAccount")]
+        public HttpResponseMessage DeleteAccount(DeleteAccountModel model)
+        {
+            HttpResponseMessage resp = new HttpResponseMessage();
+
+            IEnumerable<User> users = this.usersManager.GetItems() as IEnumerable<User>;
+            IEnumerable<Claim> claims = (HttpContext.Current.User as ClaimsPrincipal).Claims;
+
+            string userEmail = claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(userEmail))
+            {
+                User user = users.Where(u => u.Email == userEmail).FirstOrDefault();
+
+                if (user != null)
+                {
+                    if (model.IsExternal)
+                    {
+                        this.usersManager.DeleteItem(user);
+                        this.usersManager.SaveChanges();
+
+                        resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsSuccessful = true }));
+                        resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    }
+                    else
+                    {
+                        string hashedPassword = PasswordHelper.CreatePasswordHash(model.Password, user.Salt);
+
+                        if (user.HashedPassword == hashedPassword)
+                        {
+                            this.usersManager.DeleteItem(user);
+                            this.usersManager.SaveChanges();
+
+                            resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsSuccessful = true }));
+                            resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                        }
+                        else
+                        {
+                            resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsSuccessful = false, State = "incorrect_password" }));
+                            resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                        }
+                    } 
+                }
+                else
+                {
+                    resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsSuccessful = false }));
                     resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 }
             }
