@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace Hemo.Models
+﻿namespace Hemo.Models.Users
 {
     public class UsersCreateModel
     {
@@ -16,5 +11,6 @@ namespace Hemo.Models
         public string PhoneNumber { get; set; }
         public int Age { get; set; }
         public int BloodType { get; set; }
+        public string AccessToken { get; set; }
     }
 }

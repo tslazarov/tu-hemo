@@ -2,8 +2,8 @@
 using Hemo.Data.Contracts;
 using Hemo.Extensions;
 using Hemo.Models;
+using Hemo.Models.Users;
 using Hemo.Utilities;
-using Microsoft.Owin;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json;
 using System;
@@ -13,7 +13,6 @@ using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace Hemo
 {
@@ -79,7 +78,7 @@ namespace Hemo
 
                             if (user.UserExternalId == contentResponse.Id)
                             {
-                                identity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
+                                identity.AddClaim(new Claim(ClaimTypes.Role, "User"));
                                 identity.AddClaim(new Claim(ClaimTypes.Email, user.Email));
                                 identity.AddClaim(new Claim(ClaimTypes.Name, string.Format("{0} {1}", user.FirstName, user.LastName)));
                                 // add additional claims if needed

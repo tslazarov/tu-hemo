@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace Hemo.Models
+﻿namespace Hemo.Models.Users
 {
     public class FacebookModel
     {
