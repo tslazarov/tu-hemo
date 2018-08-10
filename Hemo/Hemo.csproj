@@ -151,12 +151,14 @@
     <Compile Include="Assembly\IWebAssembly.cs" />
     <Compile Include="Attributes\AuthorizeAttribute.cs" />
     <Compile Include="AuthorizationServerProvider.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Extensions\OwinRequestExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Settings\ChangePasswordModel.cs" />
     <Compile Include="Models\Users\FacebookModel.cs" />
     <Compile Include="Models\Users\FacebookPictureModel.cs" />
     <Compile Include="Models\Users\UsersBasicProfileViewModel.cs" />

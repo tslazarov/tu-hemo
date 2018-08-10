@@ -132,7 +132,7 @@ namespace Hemo.Controllers
 
             if(user !=null)
             {
-                foreach (var claim in user.Claims)
+                foreach (Claim claim in user.Claims)
                 {
                     if(claim.Type == ClaimTypes.Email)
                     {
@@ -147,7 +147,14 @@ namespace Hemo.Controllers
 
                 IEnumerable<User> users = ((IManager)this.usersManager).GetItems() as IEnumerable<User>;
 
-                profile.ProfileImage = users.Where(u => u.Email == profile.Email).FirstOrDefault().Image;
+                var hemoUser = users.Where(u => u.Email == profile.Email).FirstOrDefault();
+
+                if(hemoUser != null)
+                {
+                    profile.ProfileImage = hemoUser.Image;
+                    profile.IsExternal = hemoUser.IsExternal;
+                }
+                
             }
 
             HttpResponseMessage resp = new HttpResponseMessage();

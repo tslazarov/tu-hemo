@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace Hemo.Extensions
@@ -15,11 +16,9 @@ namespace Hemo.Extensions
         /// <returns>Dictionary of combined form body, query string, and request headers.</returns>
         public static Dictionary<string, string> GetRequestParameters(this IOwinRequest request)
         {
-            var bodyParameters = request.GetBodyParameters();
-
-            var queryParameters = request.GetQueryParameters();
-
-            var headerParameters = request.GetHeaderParameters();
+            Dictionary<string,string> bodyParameters = request.GetBodyParameters();
+            Dictionary<string, string> queryParameters = request.GetQueryParameters();
+            Dictionary<string, string> headerParameters = request.GetHeaderParameters();
 
             bodyParameters.Merge(queryParameters);
 
@@ -35,11 +34,11 @@ namespace Hemo.Extensions
         /// <returns>Dictionary of query string parameters.</returns>
         public static Dictionary<string, string> GetQueryParameters(this IOwinRequest request)
         {
-            var dictionary = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase);
+            Dictionary<string, string> dictionary = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase);
 
-            foreach (var pair in request.Query)
+            foreach (KeyValuePair<string, string[]> pair in request.Query)
             {
-                var value = GetJoinedValue(pair.Value);
+                string value = GetJoinedValue(pair.Value);
 
                 dictionary.Add(pair.Key, value);
             }
@@ -54,15 +53,15 @@ namespace Hemo.Extensions
         /// <returns>Dictionary of form body parameters.</returns>
         public static Dictionary<string, string> GetBodyParameters(this IOwinRequest request)
         {
-            var dictionary = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase);
+            Dictionary<string, string> dictionary = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase);
 
-            var formCollectionTask = request.ReadFormAsync();
+            Task<IFormCollection> formCollectionTask = request.ReadFormAsync();
 
             formCollectionTask.Wait();
 
-            foreach (var pair in formCollectionTask.Result)
+            foreach (KeyValuePair<string,string[]> pair in formCollectionTask.Result)
             {
-                var value = GetJoinedValue(pair.Value);
+                string value = GetJoinedValue(pair.Value);
 
                 dictionary.Add(pair.Key, value);
             }
@@ -77,11 +76,11 @@ namespace Hemo.Extensions
         /// <returns>Dictionary of header parameters.</returns>
         public static Dictionary<string, string> GetHeaderParameters(this IOwinRequest request)
         {
-            var dictionary = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase);
+            Dictionary<string, string> dictionary = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase);
 
-            foreach (var pair in request.Headers)
+            foreach (KeyValuePair<string, string[]> pair in request.Headers)
             {
-                var value = GetJoinedValue(pair.Value);
+                string value = GetJoinedValue(pair.Value);
 
                 dictionary.Add(pair.Key, value);
             }
@@ -99,7 +98,7 @@ namespace Hemo.Extensions
 
         public static void Merge<TKey, TValue>(this IDictionary<TKey, TValue> to, IDictionary<TKey, TValue> data)
         {
-            foreach (var item in data)
+            foreach (KeyValuePair<TKey, TValue> item in data)
             {
                 if (to.ContainsKey(item.Key) == false)
                 {

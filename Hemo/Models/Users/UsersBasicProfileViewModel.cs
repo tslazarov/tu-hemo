@@ -12,5 +12,8 @@ namespace Hemo.Models.Users
 
         [JsonProperty("profileImage")]
         public string ProfileImage { get; set; }
+
+        [JsonProperty("isExternal")]
+        public bool IsExternal { get; set; }
     }
 }

@@ -36,9 +36,9 @@ namespace Hemo
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
-            var identity = new ClaimsIdentity(context.Options.AuthenticationType);
+            ClaimsIdentity identity = new ClaimsIdentity(context.Options.AuthenticationType);
 
-            var parameters = context.Request.GetBodyParameters();
+            Dictionary<string,string> parameters = context.Request.GetBodyParameters();
 
             IEnumerable<User> users = this.usersManager.GetItems() as IEnumerable<User>;
 
@@ -48,7 +48,7 @@ namespace Hemo
             {
                 if (!parameters.ContainsKey("external"))
                 {
-                    var hashedPassword = PasswordHelper.CreatePasswordHash(context.Password, user.Salt);
+                    string hashedPassword = PasswordHelper.CreatePasswordHash(context.Password, user.Salt);
 
                     if (user.HashedPassword == hashedPassword)
                     {
@@ -65,16 +65,16 @@ namespace Hemo
                 }
                 else
                 {
-                    using (var client = new HttpClient())
+                    using (HttpClient client = new HttpClient())
                     {
                         client.BaseAddress = new Uri(Constants.FacebookGraphAPIBaseUrl);
 
-                        var response = await client.GetAsync(Constants.FacebookGraphAPIMeEndpoint + parameters["access_token"]);
-                        var content = await response.Content.ReadAsStringAsync();
+                        HttpResponseMessage response = await client.GetAsync(Constants.FacebookGraphAPIMeEndpoint + parameters["access_token"]);
+                        string content = await response.Content.ReadAsStringAsync();
 
                         if(response.StatusCode == HttpStatusCode.OK)
                         {
-                            var contentResponse = JsonConvert.DeserializeObject<FacebookModel>(content);
+                            FacebookModel contentResponse = JsonConvert.DeserializeObject<FacebookModel>(content);
 
                             if (user.UserExternalId == contentResponse.Id)
                             {

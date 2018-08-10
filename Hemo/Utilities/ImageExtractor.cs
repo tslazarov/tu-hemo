@@ -17,24 +17,24 @@ namespace Hemo.Utilities
         {
             string userId = await GetUserId(accessToken);
             string imageUrl = await GetImageUrl(userId, accessToken);
-            string base64Image = await GetImage(imageUrl);
+            string base64Image = GetImage(imageUrl);
 
             return base64Image;
         }
 
         private async Task<string> GetUserId(string accessToken)
         {
-            using (var client = new HttpClient())
+            using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri(Constants.FacebookGraphAPIBaseUrl);
 
-                var response = client.GetAsync(Constants.FacebookGraphAPIMeEndpoint + accessToken).Result;
+                HttpResponseMessage response = client.GetAsync(Constants.FacebookGraphAPIMeEndpoint + accessToken).Result;
 
-                var content = response.Content.ReadAsStringAsync().Result;
+                string content = await response.Content.ReadAsStringAsync();
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    var contentResponse = JsonConvert.DeserializeObject<FacebookModel>(content);
+                    FacebookModel contentResponse = JsonConvert.DeserializeObject<FacebookModel>(content);
 
                     return contentResponse.Id;
                 }
@@ -45,16 +45,16 @@ namespace Hemo.Utilities
 
         private async Task<string> GetImageUrl(string userId, string accessToken)
         {
-            using (var client = new HttpClient())
+            using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri(Constants.FacebookGraphAPIBaseUrl);
 
-                var response = client.GetAsync(userId + "/" + Constants.FacebookGraphAPIPictureEndpoint + accessToken).Result;
-                var content = await response.Content.ReadAsStringAsync();
+                HttpResponseMessage response = client.GetAsync(userId + "/" + Constants.FacebookGraphAPIPictureEndpoint + accessToken).Result;
+                string content = await response.Content.ReadAsStringAsync();
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    var contentResponse = JsonConvert.DeserializeObject<FacebookPictureModel>(content);
+                    FacebookPictureModel contentResponse = JsonConvert.DeserializeObject<FacebookPictureModel>(content);
 
                     return contentResponse.Data.Url;
                 }
@@ -63,11 +63,11 @@ namespace Hemo.Utilities
             }
         }
 
-        private async Task<string> GetImage(string imageUrl)
+        private string GetImage(string imageUrl)
         {
-            using (var client = new HttpClient())
+            using (HttpClient client = new HttpClient())
             {
-                var bytes = client.GetByteArrayAsync(imageUrl).Result;
+                byte[] bytes = client.GetByteArrayAsync(imageUrl).Result;
                 return Convert.ToBase64String(bytes);
             }
         }
