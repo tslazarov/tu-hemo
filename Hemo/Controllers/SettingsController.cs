@@ -41,7 +41,7 @@ namespace Hemo.Controllers
             this.imageExtractor = imageExtractor;
         }
 
-        // PUT api/users/exist
+        // PUT api/users/changePassword
         [Authorize]
         [AcceptVerbs("PUT")]
         [HttpPut]
@@ -85,7 +85,7 @@ namespace Hemo.Controllers
             return resp;
         }
 
-        // PUT api/users/exist
+        // PUT api/users/changeEmail
         [Authorize]
         [AcceptVerbs("PUT")]
         [HttpPut]
@@ -122,6 +122,44 @@ namespace Hemo.Controllers
                         resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsChanged = false, State = "existing_mail" }));
                         resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                     }
+                }
+                else
+                {
+                    resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsChanged = false, State = "incorrect_password" }));
+                    resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                }
+            }
+
+            return resp;
+        }
+
+        // PUT api/users/changeLanguage
+        [Authorize]
+        [AcceptVerbs("PUT")]
+        [HttpPut]
+        [Route("api/settings/changeLanguage")]
+        public HttpResponseMessage ChangeLanguage(ChangeLanguageModel model)
+        {
+            HttpResponseMessage resp = new HttpResponseMessage();
+
+            IEnumerable<User> users = this.usersManager.GetItems() as IEnumerable<User>;
+            IEnumerable<Claim> claims = (HttpContext.Current.User as ClaimsPrincipal).Claims;
+
+            string userEmail = claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(userEmail))
+            {
+                User user = users.Where(u => u.Email == userEmail).FirstOrDefault();
+
+                if(user != null)
+                {
+                    user.PreferredLanguage = (PreferredLanguage)model.SelectedLanguage;
+
+                    this.usersManager.UpdateItem(user);
+                    this.usersManager.SaveChanges();
+
+                    resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsChanged = true }));
+                    resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 }
                 else
                 {

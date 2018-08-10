@@ -103,6 +103,15 @@ namespace Hemo.Controllers
                 user.PhoneNumber = model.PhoneNumber;
                 user.BloodType = (BloodType)model.BloodType;
 
+                if(model.PreferredLanguage == "en")
+                {
+                    user.PreferredLanguage = PreferredLanguage.English;
+                }
+                else if(model.PreferredLanguage == "bg")
+                {
+                    user.PreferredLanguage = PreferredLanguage.Bulgarian;
+                }
+
                 this.usersManager.CreateItem(user);
                 this.usersManager.SaveChanges();
                 isCreated = true;
@@ -128,7 +137,7 @@ namespace Hemo.Controllers
         {
             ClaimsPrincipal user = HttpContext.Current.User as ClaimsPrincipal;
 
-            UsersBasicProfileViewModel profile = new UsersBasicProfileViewModel();
+            UsersBasicProfileViewModel viewModel = new UsersBasicProfileViewModel();
 
             if(user !=null)
             {
@@ -136,30 +145,64 @@ namespace Hemo.Controllers
                 {
                     if(claim.Type == ClaimTypes.Email)
                     {
-                        profile.Email = claim.Value;
+                        viewModel.Email = claim.Value;
 
                     }
                     else if(claim.Type == ClaimTypes.Name)
                     {
-                        profile.Name = claim.Value;
+                        viewModel.Name = claim.Value;
                     }
                 }
 
                 IEnumerable<User> users = ((IManager)this.usersManager).GetItems() as IEnumerable<User>;
 
-                User hemoUser = users.Where(u => u.Email == profile.Email).FirstOrDefault();
+                User hemoUser = users.Where(u => u.Email == viewModel.Email).FirstOrDefault();
 
                 if(hemoUser != null)
                 {
-                    profile.ProfileImage = hemoUser.Image;
-                    profile.IsExternal = hemoUser.IsExternal;
+                    viewModel.ProfileImage = hemoUser.Image;
+                    viewModel.IsExternal = hemoUser.IsExternal;
                 }
                 
             }
 
             HttpResponseMessage resp = new HttpResponseMessage();
 
-            resp.Content = new StringContent(JsonConvert.SerializeObject(profile));
+            resp.Content = new StringContent(JsonConvert.SerializeObject(viewModel));
+            resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            return resp;
+        }
+
+        // GET api/users/preferredLanguage
+        [Authorize]
+        [AcceptVerbs("GET")]
+        [HttpGet]
+        [Route("api/users/preferredLanguage")]
+        public HttpResponseMessage GetPreferredLanguage()
+        {
+            ClaimsPrincipal user = HttpContext.Current.User as ClaimsPrincipal;
+
+            PreferredLanguageViewModel viewModel = new PreferredLanguageViewModel();
+
+            IEnumerable<User> users = this.usersManager.GetItems() as IEnumerable<User>;
+            IEnumerable<Claim> claims = (HttpContext.Current.User as ClaimsPrincipal).Claims;
+
+            string userEmail = claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(userEmail))
+            {
+                User hemoUser = users.Where(u => u.Email == userEmail).FirstOrDefault();
+
+                if (hemoUser != null)
+                {
+                    viewModel.PreferredLanguage = (int)hemoUser.PreferredLanguage;
+                }
+            }
+
+            HttpResponseMessage resp = new HttpResponseMessage();
+
+            resp.Content = new StringContent(JsonConvert.SerializeObject(viewModel));
             resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             return resp;

@@ -158,11 +158,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Settings\ChangeLanguageModel.cs" />
     <Compile Include="Models\Settings\ChangeEmailModel.cs" />
     <Compile Include="Models\Settings\ChangeGeneralResponseViewModel.cs" />
     <Compile Include="Models\Settings\ChangePasswordModel.cs" />
     <Compile Include="Models\Users\FacebookModel.cs" />
     <Compile Include="Models\Users\FacebookPictureModel.cs" />
+    <Compile Include="Models\Users\PreferredLanguageViewModel.cs" />
     <Compile Include="Models\Users\UsersBasicProfileViewModel.cs" />
     <Compile Include="Models\Users\UsersCreateModel.cs" />
     <Compile Include="Models\Users\UsersExistingEmailModel.cs" />

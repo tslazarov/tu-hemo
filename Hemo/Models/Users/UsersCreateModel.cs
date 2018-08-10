@@ -12,5 +12,6 @@
         public int Age { get; set; }
         public int BloodType { get; set; }
         public string AccessToken { get; set; }
+        public string PreferredLanguage { get; set; }
     }
 }

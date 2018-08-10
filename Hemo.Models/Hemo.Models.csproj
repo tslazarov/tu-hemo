@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assembly\IModelsAssembly.cs" />
+    <Compile Include="PreferredLanguage.cs" />
     <Compile Include="BloodType.cs" />
     <Compile Include="DonationsCenter.cs" />
     <Compile Include="DonationsRequest.cs" />

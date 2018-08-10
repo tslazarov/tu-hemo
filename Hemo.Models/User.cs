@@ -49,6 +49,8 @@ namespace Hemo.Models
 
         public BloodType BloodType { get; set; }
 
+        public PreferredLanguage PreferredLanguage { get; set; }
+
         public string PhoneNumber { get; set; }
 
         public string Image { get; set; }
