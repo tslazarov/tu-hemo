@@ -2,6 +2,7 @@
 using Hemo.Data.Contracts;
 using Hemo.Data.Factories;
 using Hemo.Models;
+using Hemo.Models.Settings;
 using Hemo.Models.Users;
 using Hemo.SendGrid;
 using Hemo.Utilities;
@@ -136,14 +137,15 @@ namespace Hemo.Controllers
             return resp;
         }
 
-        // PUT api/users/resetPassword
+        // PUT api/users/sendResetCode
         [AllowAnonymous]
         [AcceptVerbs("PUT")]
         [HttpPut]
-        [Route("api/users/resetPassword")]
-        public HttpResponseMessage ResetPassword(UsersResetPasswordModel model)
+        [Route("api/users/sendResetCode")]
+        public HttpResponseMessage SendResetCode(UsersResetCodeModel model)
         {
             HttpResponseMessage resp = new HttpResponseMessage();
+            ResetPasswordViewModel viewModel = new ResetPasswordViewModel();
 
             IEnumerable<User> users = this.usersManager.GetItems() as IEnumerable<User>;
 
@@ -151,16 +153,24 @@ namespace Hemo.Controllers
 
             if (user != null)
             {
-                string randomNumber = Guid.NewGuid().ToString().Replace("-", "").Substring(12, 8);
+                string randomString = Guid.NewGuid().ToString().Replace("-", "").Substring(12, 8);
+                viewModel.ResetCode = randomString;
 
-                string plainText = sender.GetResetPasswordPlainText(randomNumber);
-                string htmlText = sender.GetResetPasswordHtml(randomNumber);
+                string plainText = sender.GetResetPasswordPlainText(randomString, model.Language);
+                string htmlText = sender.GetResetPasswordHtml(randomString, model.Language);
 
-                sender.SendMessage("support@hemo.com", "Hemo Support", model.Email, "[Hemo] Password Reset", plainText, htmlText);
+                HttpStatusCode status = sender.SendMessage("support@hemo.com", "Hemo Support", model.Email, "[Hemo] Password Reset", plainText, htmlText);
 
-                resp.Content = new StringContent("test");
-                resp.StatusCode = HttpStatusCode.OK;
-                resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                if(status == HttpStatusCode.Accepted)
+                {
+                    user.ResetCode = randomString;
+
+                    this.usersManager.UpdateItem(user);
+                    this.usersManager.SaveChanges();
+
+                    resp.Content = new StringContent(JsonConvert.SerializeObject(viewModel));
+                    resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                }
             }
 
             return resp;
@@ -250,6 +260,48 @@ namespace Hemo.Controllers
 
             return resp;
         }
+
+        // PUT api/users/resetPassword
+        [AllowAnonymous]
+        [AcceptVerbs("PUT")]
+        [HttpPut]
+        [Route("api/users/resetPassword")]
+        public HttpResponseMessage ResetPassword(UsersResetPasswordModel model)
+        {
+            HttpResponseMessage resp = new HttpResponseMessage();
+
+            IEnumerable<User> users = this.usersManager.GetItems() as IEnumerable<User>;
+
+            User user = users.Where(u => u.Email == model.Email).FirstOrDefault();
+
+            if (user != null)
+            {
+                if (user.ResetCode == model.ResetCode)
+                {
+                    string salt = PasswordHelper.CreateSalt(10);
+                    string hashedNewPassword = PasswordHelper.CreatePasswordHash(model.NewPassword, salt);
+
+                    user.Salt = salt;
+                    user.HashedPassword = hashedNewPassword;
+                    user.ResetCode = null;
+
+                    this.usersManager.UpdateItem(user);
+                    this.usersManager.SaveChanges();
+
+                    resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsSuccessful = true }));
+                    resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                }
+                else
+                {
+                    resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsSuccessful = false, State = "incorrect_reset_code" }));
+                    resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                }
+            }
+            
+
+            return resp;
+        }
+
 
         // GET api/users/preferredLanguage
         [Authorize]

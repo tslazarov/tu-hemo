@@ -51,6 +51,8 @@ namespace Hemo.Models
 
         public PreferredLanguage PreferredLanguage { get; set; }
 
+        public string ResetCode { get; set; }
+
         public string PhoneNumber { get; set; }
 
         public string Image { get; set; }

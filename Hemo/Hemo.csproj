@@ -147,6 +147,7 @@
   <ItemGroup>
     <Compile Include="App_Start\Ninject.Web.Common.cs" />
     <Compile Include="App_Start\NinjectModules\DataNinjectModule.cs" />
+    <Compile Include="App_Start\NinjectModules\SendGridNinjectModule.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Assembly\IWebAssembly.cs" />
     <Compile Include="Attributes\AuthorizeAttribute.cs" />
@@ -167,10 +168,13 @@
     <Compile Include="Models\Users\FacebookModel.cs" />
     <Compile Include="Models\Users\FacebookPictureModel.cs" />
     <Compile Include="Models\Users\PreferredLanguageViewModel.cs" />
+    <Compile Include="Models\Users\ResetPasswordViewModel.cs" />
     <Compile Include="Models\Users\UsersBasicProfileViewModel.cs" />
     <Compile Include="Models\Users\UsersCreateModel.cs" />
     <Compile Include="Models\Users\UsersExistingEmailModel.cs" />
     <Compile Include="Models\Users\UsersFullProfileViewModel.cs" />
+    <Compile Include="Models\Users\UsersResetCodeModel.cs" />
+    <Compile Include="Models\Users\UsersResetPasswordModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utilities\Constants.cs" />
