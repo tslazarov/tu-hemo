@@ -3,11 +3,13 @@ using Hemo.Data.Contracts;
 using Hemo.Data.Factories;
 using Hemo.Models;
 using Hemo.Models.Users;
+using Hemo.SendGrid;
 using Hemo.Utilities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -21,8 +23,10 @@ namespace Hemo.Controllers
         private IManager usersManager;
         private IUsersFactory usersFactory;
         private IImageExtractor imageExtractor;
+        private ISendGridSender sender;
 
-        public UsersController(IUsersManager usersManager, IUsersFactory usersFactory, IImageExtractor imageExtractor)
+
+        public UsersController(IUsersManager usersManager, IUsersFactory usersFactory, IImageExtractor imageExtractor, ISendGridSender sender)
         {
             Guard.WhenArgument<IUsersManager>(usersManager, "Users manager cannot be null.")
                 .IsNull()
@@ -35,10 +39,14 @@ namespace Hemo.Controllers
             Guard.WhenArgument<IImageExtractor>(imageExtractor, "Image extractor cannot be null.")
                 .IsNull()
                 .Throw();
+            Guard.WhenArgument<ISendGridSender>(sender, "SendGrid Sender cannot be null.")
+                .IsNull()
+                .Throw();
 
             this.usersManager = usersManager as IManager;
             this.usersFactory = usersFactory;
             this.imageExtractor = imageExtractor;
+            this.sender = sender;
         }
 
         // PUT api/users/exist
@@ -122,6 +130,36 @@ namespace Hemo.Controllers
             if (users != null)
             {
                 resp.Content = new StringContent(JsonConvert.SerializeObject(isCreated));
+                resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            }
+
+            return resp;
+        }
+
+        // PUT api/users/resetPassword
+        [AllowAnonymous]
+        [AcceptVerbs("PUT")]
+        [HttpPut]
+        [Route("api/users/resetPassword")]
+        public HttpResponseMessage ResetPassword(UsersResetPasswordModel model)
+        {
+            HttpResponseMessage resp = new HttpResponseMessage();
+
+            IEnumerable<User> users = this.usersManager.GetItems() as IEnumerable<User>;
+
+            User user = users.FirstOrDefault(u => u.Email == model.Email && !u.IsExternal);
+
+            if (user != null)
+            {
+                string randomNumber = Guid.NewGuid().ToString().Replace("-", "").Substring(12, 8);
+
+                string plainText = sender.GetResetPasswordPlainText(randomNumber);
+                string htmlText = sender.GetResetPasswordHtml(randomNumber);
+
+                sender.SendMessage("support@hemo.com", "Hemo Support", model.Email, "[Hemo] Password Reset", plainText, htmlText);
+
+                resp.Content = new StringContent("test");
+                resp.StatusCode = HttpStatusCode.OK;
                 resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             }
 

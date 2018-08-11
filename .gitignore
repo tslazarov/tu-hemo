@@ -331,3 +331,5 @@ ASALocalRun/
 
 # Settings files
 *.settings
+
+app.config
