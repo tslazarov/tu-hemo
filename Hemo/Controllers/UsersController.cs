@@ -174,6 +174,45 @@ namespace Hemo.Controllers
             return resp;
         }
 
+        // GET api/users/fullProfile
+        [Authorize]
+        [AcceptVerbs("GET")]
+        [HttpGet]
+        [Route("api/users/fullProfile")]
+        public HttpResponseMessage GetFullProfile()
+        {
+            ClaimsPrincipal user = (HttpContext.Current.User as ClaimsPrincipal);
+            string userEmail = user.Claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).FirstOrDefault();
+
+            UsersFullProfileViewModel viewModel = new UsersFullProfileViewModel();
+
+            if (user != null)
+            {
+                IEnumerable<User> users = ((IManager)this.usersManager).GetItems() as IEnumerable<User>;
+
+                User hemoUser = users.Where(u => u.Email == userEmail).FirstOrDefault();
+
+                if (hemoUser != null)
+                {
+                    viewModel.Email = hemoUser.Email;
+                    viewModel.FirstName = hemoUser.FirstName;
+                    viewModel.LastName = hemoUser.LastName;
+                    viewModel.PhoneNumber = hemoUser.PhoneNumber;
+                    viewModel.Age = hemoUser.Age;
+                    viewModel.BloodType = (int)hemoUser.BloodType;
+                    viewModel.ProfileImage = hemoUser.Image;
+                }
+
+            }
+
+            HttpResponseMessage resp = new HttpResponseMessage();
+
+            resp.Content = new StringContent(JsonConvert.SerializeObject(viewModel));
+            resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            return resp;
+        }
+
         // GET api/users/preferredLanguage
         [Authorize]
         [AcceptVerbs("GET")]

@@ -171,6 +171,49 @@ namespace Hemo.Controllers
             return resp;
         }
 
+        // PUT api/users/changePersonalInformation
+        [Authorize]
+        [AcceptVerbs("PUT")]
+        [HttpPut]
+        [Route("api/settings/changePersonalInformation")]
+        public HttpResponseMessage ChangePersonalInformation(ChangePersonalInformationModel model)
+        {
+            HttpResponseMessage resp = new HttpResponseMessage();
+
+            IEnumerable<User> users = this.usersManager.GetItems() as IEnumerable<User>;
+            IEnumerable<Claim> claims = (HttpContext.Current.User as ClaimsPrincipal).Claims;
+
+            string userEmail = claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(userEmail))
+            {
+                User user = users.Where(u => u.Email == userEmail).FirstOrDefault();
+
+                if (user != null)
+                {
+                    user.FirstName = model.FirstName;
+                    user.LastName = model.LastName;
+                    user.PhoneNumber = model.PhoneNumber;
+                    user.Age = model.Age;
+                    user.BloodType = (BloodType)model.BloodType;
+                    user.Image = model.Image;
+
+                    this.usersManager.UpdateItem(user);
+                    this.usersManager.SaveChanges();
+
+                    resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsSuccessful = true }));
+                    resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                }
+                else
+                {
+                    resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsSuccessful = false }));
+                    resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                }
+            }
+
+            return resp;
+        }
+
         // PUT api/users/changeLanguage
         [Authorize]
         [AcceptVerbs("PUT")]
