@@ -31,6 +31,9 @@ namespace Hemo.Data
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
             modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
 
+            modelBuilder.Conventions.Remove<DecimalPropertyConvention>();
+            modelBuilder.Conventions.Add(new DecimalPropertyConvention(9, 6));
+
             Database.SetInitializer<HemoContext>(null);
             base.OnModelCreating(modelBuilder);
         }

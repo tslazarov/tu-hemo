@@ -5,6 +5,6 @@ namespace Hemo.Data.Factories
 {
     public interface IDonationsRequestsFactory
     {
-        DonationsRequest Create(Guid id, Guid ownerId, string address, decimal longtitude, decimal latitude, BloodType requestedBloodType, int requestedBloodQuantityInMl);
+        DonationsRequest Create(Guid id, Guid ownerId, string address, string city, string country, decimal latitude, decimal longitude, BloodType requestedBloodType, int requestedBloodQuantityInMl);
     }
 }

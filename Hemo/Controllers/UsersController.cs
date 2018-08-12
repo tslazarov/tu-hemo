@@ -128,11 +128,8 @@ namespace Hemo.Controllers
 
             HttpResponseMessage resp = new HttpResponseMessage();
 
-            if (users != null)
-            {
-                resp.Content = new StringContent(JsonConvert.SerializeObject(isCreated));
-                resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            }
+            resp.Content = new StringContent(JsonConvert.SerializeObject(isCreated));
+            resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             return resp;
         }

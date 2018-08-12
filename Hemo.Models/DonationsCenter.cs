@@ -9,13 +9,15 @@ namespace Hemo.Models
         {
         }
 
-        public DonationsCenter(Guid id, string address, string phoneNumber, decimal longtitude, decimal latitude)
+        public DonationsCenter(Guid id, string address, string city, string country, string phoneNumber, decimal latitude, decimal longitude)
         {
             this.Id = id;
             this.Address = address;
+            this.City = address;
+            this.Country = address;
             this.PhoneNumber = phoneNumber;
-            this.Longtitude = Longtitude;
             this.Latitude = latitude;
+            this.Longitude = longitude;
         }
 
         [Key]
@@ -25,13 +27,19 @@ namespace Hemo.Models
         public string Address { get; set; }
 
         [Required]
+        public string City { get; set; }
+
+        [Required]
+        public string Country { get; set; }
+
+        [Required]
         public string PhoneNumber { get; set; }
 
         public string EmailAddress { get; set; }
 
         [Required]
         [DataType("decimal(9,6)")]
-        public decimal Longtitude { get; set; }
+        public decimal Longitude { get; set; }
 
         [Required]
         [DataType("decimal(9,6)")]

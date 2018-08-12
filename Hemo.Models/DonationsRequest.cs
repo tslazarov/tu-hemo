@@ -13,13 +13,15 @@ namespace Hemo.Models
             this.Donators = new List<Donator>();
         }
 
-        public DonationsRequest(Guid id, Guid ownerId, string address, decimal longtitude, decimal latitude, BloodType requestedBloodType, int requestedBloodQuantityInMl)
+        public DonationsRequest(Guid id, Guid ownerId, string address, string city, string country, decimal latitude, decimal longitude, BloodType requestedBloodType, int requestedBloodQuantityInMl)
         {
             this.Id = id;
             this.OwnerId = ownerId;
             this.Address = address;
-            this.Longtitude = longtitude;
+            this.City = city;
+            this.Country = country;
             this.Latitude = latitude;
+            this.Longitude = longitude;
             this.RequestedBloodType = requestedBloodType;
             this.RequestedBloodQuantityInMl = requestedBloodQuantityInMl;
             this.Donators = new List<Donator>();
@@ -35,8 +37,14 @@ namespace Hemo.Models
         public string Address { get; set; }
 
         [Required]
+        public string City { get; set; }
+
+        [Required]
+        public string Country { get; set; }
+
+        [Required]
         [DataType("decimal(9,6)")]
-        public decimal Longtitude { get; set; }
+        public decimal Longitude { get; set; }
 
         [Required]
         [DataType("decimal(9,6)")]

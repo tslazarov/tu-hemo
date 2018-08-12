@@ -152,6 +152,7 @@
     <Compile Include="Assembly\IWebAssembly.cs" />
     <Compile Include="Attributes\AuthorizeAttribute.cs" />
     <Compile Include="AuthorizationServerProvider.cs" />
+    <Compile Include="Controllers\RequestsController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Requests\RequestsCreateModel.cs" />
     <Compile Include="Models\Settings\ChangePersonalInformationModel.cs" />
     <Compile Include="Models\Settings\ChangeLanguageModel.cs" />
     <Compile Include="Models\Settings\ChangeEmailModel.cs" />
