@@ -24,6 +24,7 @@ namespace Hemo.Models
             this.Longitude = longitude;
             this.RequestedBloodType = requestedBloodType;
             this.RequestedBloodQuantityInMl = requestedBloodQuantityInMl;
+            this.Date = DateTime.Now.Date;
             this.Donators = new List<Donator>();
         }
 
@@ -41,6 +42,9 @@ namespace Hemo.Models
 
         [Required]
         public string Country { get; set; }
+
+        [Required]
+        public DateTime Date { get; set; }
 
         [Required]
         [DataType("decimal(9,6)")]

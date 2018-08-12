@@ -46,6 +46,50 @@ namespace Hemo.Controllers
             this.requestsFactory = requestsFactory;
         }
 
+
+        // POST api/requests/create
+        [Authorize]
+        [AcceptVerbs("GET")]
+        [HttpGet]
+        [Route("api/requests")]
+        public HttpResponseMessage CreateRequests(int skip, int take)
+        {
+            IList<RequestListViewModel> requestsListViewModel = new List<RequestListViewModel>();
+
+            IEnumerable<User> users = this.usersManager.GetItems() as IEnumerable<User>;
+            IEnumerable<Claim> claims = (HttpContext.Current.User as ClaimsPrincipal).Claims;
+
+            string userEmail = claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(userEmail))
+            {
+                User user = users.Where(u => u.Email == userEmail).FirstOrDefault();
+
+                if (user != null)
+                {
+                    IEnumerable<DonationsRequest> requests = this.requestsManager.GetItems() as IEnumerable<DonationsRequest>;
+
+                    IEnumerable<DonationsRequest> query = requests.Where(r => r.OwnerId == user.Id).Skip(skip).Take(take);
+
+                    foreach (var request in query)
+                    {
+                        requestsListViewModel.Add(new RequestListViewModel() {
+                            Id = request.Id,
+                            Date = request.Date,
+                            RequestedBloodQuantity = request.RequestedBloodQuantityInMl,
+                            BloodType = request.RequestedBloodType });
+                    }
+                }
+            }
+
+            HttpResponseMessage resp = new HttpResponseMessage();
+
+            resp.Content = new StringContent(JsonConvert.SerializeObject(requestsListViewModel));
+            resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            return resp;
+        }
+
         // POST api/requests/create
         [Authorize]
         [AcceptVerbs("POST")]
