@@ -25,9 +25,6 @@ namespace Hemo.Controllers
         private IManager usersManager;
         private IManager requestsManager;
         private IDonationsRequestsFactory requestsFactory;
-        private IImageExtractor imageExtractor;
-        private ISendGridSender sender;
-
 
         public RequestsController(IDonationsRequestsManager requestsManager, IUsersManager usersManager, IDonationsRequestsFactory requestsFactory)
         {
@@ -52,7 +49,7 @@ namespace Hemo.Controllers
         [AcceptVerbs("GET")]
         [HttpGet]
         [Route("api/requests")]
-        public HttpResponseMessage CreateRequests(int skip, int take)
+        public HttpResponseMessage GetRequests(int skip, int take)
         {
             IList<RequestListViewModel> requestsListViewModel = new List<RequestListViewModel>();
 
@@ -78,6 +75,72 @@ namespace Hemo.Controllers
                             Date = request.Date,
                             RequestedBloodQuantity = request.RequestedBloodQuantityInMl,
                             BloodType = request.RequestedBloodType });
+                    }
+                }
+            }
+
+            HttpResponseMessage resp = new HttpResponseMessage();
+
+            resp.Content = new StringContent(JsonConvert.SerializeObject(requestsListViewModel));
+            resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            return resp;
+        }
+
+        // POST api/requests/full
+        [Authorize]
+        [AcceptVerbs("GET")]
+        [HttpGet]
+        [Route("api/requests/full")]
+        public HttpResponseMessage GetFullRequests(int skip=0, int take=0, decimal latitude=0, decimal longitude=0, bool inRange=false, string city="", string country ="")
+        {
+            IList<RequestUserListViewModel> requestsListViewModel = new List<RequestUserListViewModel>();
+
+            IEnumerable<User> users = this.usersManager.GetItems() as IEnumerable<User>;
+            IEnumerable<Claim> claims = (HttpContext.Current.User as ClaimsPrincipal).Claims;
+
+            string userEmail = claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(userEmail))
+            {
+                User user = users.Where(u => u.Email == userEmail).FirstOrDefault();
+
+                if (user != null)
+                {
+                    IEnumerable<DonationsRequest> requests = this.requestsManager.GetItems() as IEnumerable<DonationsRequest>;
+
+                    IEnumerable<DonationsRequest> query = requests;
+
+                    if (inRange)
+                    {
+                        query = query.Where(r => RadiusChecker.GetDistance((double)latitude, (double)longitude, (double)r.Latitude, (double)r.Longitude) < 15.0D);
+                    }
+                    else if(!string.IsNullOrEmpty(city) && !string.IsNullOrEmpty(country))
+                    {
+                        query = query.Where(r => r.City.ToLower() == city.ToLower() && r.Country.ToLower() == country.ToLower());
+                    }
+
+                    query = query.Skip(skip).Take(take).OrderByDescending(r => r.Date);
+
+
+                    foreach (var request in query)
+                    {
+                        User requestUser = this.usersManager.GetItem(request.OwnerId) as User;
+
+                        requestsListViewModel.Add(new RequestUserListViewModel()
+                        {
+                            Id = request.Id,
+                            Date = request.Date,
+                            RequestedBloodQuantity = request.RequestedBloodQuantityInMl,
+                            BloodType = request.RequestedBloodType,
+                            Address = request.Address,
+                            Latitude = request.Latitude,
+                            Longitude = request.Longitude,
+                            Name = string.Format("{0} {1}", requestUser.FirstName, requestUser.LastName),
+                            Email = requestUser.Email,
+                            PhoneNumber = requestUser.PhoneNumber,
+                            Image = requestUser.Image
+                        });
                     }
                 }
             }

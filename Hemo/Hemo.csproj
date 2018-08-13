@@ -160,6 +160,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Requests\RequestUserListViewModel.cs" />
     <Compile Include="Models\Requests\RequestListViewModel.cs" />
     <Compile Include="Models\Requests\RequestsCreateModel.cs" />
     <Compile Include="Models\Settings\ChangePersonalInformationModel.cs" />
@@ -185,6 +186,7 @@
     <Compile Include="Utilities\ImageExtractor.cs" />
     <Compile Include="App_Start\NinjectWrapper.cs" />
     <Compile Include="Utilities\PasswordHelper.cs" />
+    <Compile Include="Utilities\RadiusChecker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
