@@ -92,7 +92,7 @@ namespace Hemo.Controllers
         [AcceptVerbs("GET")]
         [HttpGet]
         [Route("api/requests/full")]
-        public HttpResponseMessage GetFullRequests(int skip=0, int take=0, decimal latitude=0, decimal longitude=0, bool inRange=false, string city="", string country ="")
+        public HttpResponseMessage GetFullRequests(int skip=0, int take=0, decimal latitude=0, decimal longitude=0, bool inRange=false, string city="", string country ="", [FromUri]int[] bloodTypes=null)
         {
             IList<RequestUserListViewModel> requestsListViewModel = new List<RequestUserListViewModel>();
 
@@ -115,9 +115,15 @@ namespace Hemo.Controllers
                     {
                         query = query.Where(r => RadiusChecker.GetDistance((double)latitude, (double)longitude, (double)r.Latitude, (double)r.Longitude) < 15.0D);
                     }
-                    else if(!string.IsNullOrEmpty(city) && !string.IsNullOrEmpty(country))
+
+                    if (!string.IsNullOrEmpty(city) && !string.IsNullOrEmpty(country))
                     {
                         query = query.Where(r => r.City.ToLower() == city.ToLower() && r.Country.ToLower() == country.ToLower());
+                    }
+
+                    if (bloodTypes != null && bloodTypes.Length > 0)
+                    {
+                        query = query.Where(r => bloodTypes.Contains((int)r.RequestedBloodType));
                     }
 
                     query = query.Skip(skip).Take(take).OrderByDescending(r => r.Date);
