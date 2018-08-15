@@ -160,9 +160,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Requests\RequestOwnerViewModel.cs" />
     <Compile Include="Models\Requests\RequestUserListViewModel.cs" />
     <Compile Include="Models\Requests\RequestListViewModel.cs" />
     <Compile Include="Models\Requests\RequestsCreateModel.cs" />
+    <Compile Include="Models\Requests\RequestViewModel.cs" />
     <Compile Include="Models\Settings\ChangePersonalInformationModel.cs" />
     <Compile Include="Models\Settings\ChangeLanguageModel.cs" />
     <Compile Include="Models\Settings\ChangeEmailModel.cs" />
