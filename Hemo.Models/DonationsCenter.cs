@@ -35,7 +35,7 @@ namespace Hemo.Models
         [Required]
         public string PhoneNumber { get; set; }
 
-        public string EmailAddress { get; set; }
+        public string Email { get; set; }
 
         [Required]
         [DataType("decimal(9,6)")]

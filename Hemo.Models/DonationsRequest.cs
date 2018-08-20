@@ -35,6 +35,9 @@ namespace Hemo.Models
         public Guid OwnerId { get; set; }
 
         [Required]
+        public virtual User Owner { get; set; }
+
+        [Required]
         public string Address { get; set; }
 
         [Required]
@@ -54,7 +57,7 @@ namespace Hemo.Models
         [DataType("decimal(9,6)")]
         public decimal Latitude { get; set; }
 
-        public ICollection<Donator> Donators
+        public virtual ICollection<Donator> Donators
         {
             get
             {

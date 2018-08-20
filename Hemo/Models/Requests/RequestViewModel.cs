@@ -17,6 +17,12 @@ namespace Hemo.Models.Requests
         [JsonProperty("address")]
         public string Address { get; set; }
 
+        [JsonProperty("city")]
+        public string City { get; set; }
+
+        [JsonProperty("country")]
+        public string Country { get; set; }
+
         [JsonProperty("date")]
         public DateTime Date { get; set; }
 

@@ -5,6 +5,6 @@ namespace Hemo.Data.Factories
 {
     public interface IDonatorsFactory
     {
-        Donator Create(Guid id, string email, bool isApproved = false);
+        Donator Create(Guid id, Guid userId, User user, bool isApproved = false);
     }
 }

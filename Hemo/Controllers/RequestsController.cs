@@ -4,14 +4,11 @@ using Hemo.Data.Factories;
 using Hemo.Models;
 using Hemo.Models.Requests;
 using Hemo.Models.Settings;
-using Hemo.Models.Users;
-using Hemo.SendGrid;
 using Hemo.Utilities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -169,7 +166,7 @@ namespace Hemo.Controllers
             return resp;
         }
 
-        // POST api/requests/create
+        // GET api/requests/{id}
         [Authorize]
         [AcceptVerbs("GET")]
         [HttpGet]
@@ -181,7 +178,6 @@ namespace Hemo.Controllers
             IEnumerable<User> users = this.usersManager.GetItems() as IEnumerable<User>;
             IEnumerable<Claim> claims = (HttpContext.Current.User as ClaimsPrincipal).Claims;
 
-            bool isSigned;
             string userEmail = claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).FirstOrDefault();
 
             if (!string.IsNullOrEmpty(userEmail))
@@ -197,14 +193,22 @@ namespace Hemo.Controllers
                         requestViewModel.IsSigned = true;
                     }
 
-                    requestViewModel.Owner = new RequestOwnerViewModel()
+                    User owner = this.usersManager.GetItem(request.OwnerId) as User;
+
+                    if(owner != null)
                     {
-                        Email = user.Email,
-                        Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-                        PhoneNumber = user.PhoneNumber,
-                        Image = user.Image
-                    };
+                        requestViewModel.Owner = new RequestOwnerViewModel()
+                        {
+                            Email = owner.Email,
+                            Name = string.Format("{0} {1}", owner.FirstName, owner.LastName),
+                            PhoneNumber = owner.PhoneNumber,
+                            Image = owner.Image
+                        };
+                    }
+
                     requestViewModel.Address = request.Address;
+                    requestViewModel.City = request.City;
+                    requestViewModel.Country = request.Country;
                     requestViewModel.Date = request.Date;
                     requestViewModel.Latitude = request.Latitude;
                     requestViewModel.Longitude = request.Longitude;
@@ -226,7 +230,7 @@ namespace Hemo.Controllers
         [AcceptVerbs("POST")]
         [HttpPost]
         [Route("api/requests/create")]
-        public HttpResponseMessage AddUser(RequestsCreateModel model)
+        public HttpResponseMessage Create(RequestsCreateModel model)
         {
             bool isCreated = false;
 
@@ -263,12 +267,59 @@ namespace Hemo.Controllers
         }
 
 
+        // PUT api/requests/edit
+        [Authorize]
+        [AcceptVerbs("PUT")]
+        [HttpPut]
+        [Route("api/requests/edit")]
+        public HttpResponseMessage Edit(RequestsEditModel model)
+        {
+            bool isEdited = false;
+
+            IEnumerable<User> users = this.usersManager.GetItems() as IEnumerable<User>;
+            IEnumerable<Claim> claims = (HttpContext.Current.User as ClaimsPrincipal).Claims;
+
+            string userEmail = claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(userEmail))
+            {
+                User user = users.Where(u => u.Email == userEmail).FirstOrDefault();
+
+                if (user != null)
+                {
+                    DonationsRequest request = this.requestsManager.GetItem(model.Id) as DonationsRequest;
+
+                    request.Address = model.Address;
+                    request.City = model.City;
+                    request.Country = model.Country;
+                    request.Latitude = model.Latitude;
+                    request.Longitude = model.Longitude;
+                    request.Date = DateTime.Now;
+                    request.RequestedBloodQuantityInMl = model.BloodQuantity;
+                    request.RequestedBloodType = (BloodType)model.RequestedBloodType;
+
+                    this.requestsManager.UpdateItem(request);
+                    this.requestsManager.SaveChanges();
+
+                    isEdited = true;
+                }
+            }
+
+            HttpResponseMessage resp = new HttpResponseMessage();
+
+            resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsSuccessful = isEdited }));
+            resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            return resp;
+        }
+
+
         // POST api/requests/addUsers
         [Authorize]
         [AcceptVerbs("POST")]
         [HttpPost]
         [Route("api/requests/addDonator")]
-        public HttpResponseMessage AddDonatorFromRequest(Guid id)
+        public HttpResponseMessage AddDonatorToRequest(RequestAddDonatorModel model)
         {
             bool isAdded = false;
 
@@ -283,11 +334,9 @@ namespace Hemo.Controllers
 
                 if (user != null)
                 {
-                    DonationsRequest request = this.requestsManager.GetItem(id) as DonationsRequest;
+                    DonationsRequest request = this.requestsManager.GetItem(model.Id) as DonationsRequest;
 
-                    Donator donator = this.donatorsFactory.Create(Guid.NewGuid(), user.Email, false);
-                    donator.UserId = user.Id;
-                    donator.User = user;
+                    Donator donator = this.donatorsFactory.Create(Guid.NewGuid(), user.Id, user, false);
 
                     this.donatorsManager.CreateItem(donator);
                     this.donatorsManager.SaveChanges();
@@ -314,7 +363,7 @@ namespace Hemo.Controllers
         [AcceptVerbs("PUT")]
         [HttpPost]
         [Route("api/requests/removeDonator")]
-        public HttpResponseMessage RemoveDonatorFromRequest(Guid id)
+        public HttpResponseMessage RemoveDonatorFromRequest(RequestRemoveDonatorModel model)
         {
             bool isDeleted = false;
 
@@ -329,18 +378,21 @@ namespace Hemo.Controllers
 
                 if (user != null)
                 {
-                    DonationsRequest request = this.requestsManager.GetItem(id) as DonationsRequest;
+                    DonationsRequest request = this.requestsManager.GetItem(model.Id) as DonationsRequest;
 
-                    Donator donator = this.donatorsManager.GetItem(user.Id) as Donator;
+                    Donator donator = (this.donatorsManager.GetItems() as IEnumerable<Donator>).FirstOrDefault(i => i.UserId == user.Id) as Donator;
 
-                    request.Donators.Remove(donator);
-                    this.requestsManager.UpdateItem(request);
-                    this.requestsManager.SaveChanges();
+                    if(donator != null)
+                    {
+                        request.Donators.Remove(donator);
+                        this.requestsManager.UpdateItem(request);
+                        this.requestsManager.SaveChanges();
 
-                    this.donatorsManager.DeleteItem(donator);
-                    this.donatorsManager.SaveChanges();
+                        this.donatorsManager.DeleteItem(donator);
+                        this.donatorsManager.SaveChanges();
 
-                    isDeleted = true;
+                        isDeleted = true;
+                    }
                 }
             }
 

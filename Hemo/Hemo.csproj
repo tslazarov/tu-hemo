@@ -160,7 +160,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Requests\RequestRemoveDonatorModel.cs" />
+    <Compile Include="Models\Requests\RequestAddDonatorModel.cs" />
     <Compile Include="Models\Requests\RequestOwnerViewModel.cs" />
+    <Compile Include="Models\Requests\RequestsEditModel.cs" />
     <Compile Include="Models\Requests\RequestUserListViewModel.cs" />
     <Compile Include="Models\Requests\RequestListViewModel.cs" />
     <Compile Include="Models\Requests\RequestsCreateModel.cs" />

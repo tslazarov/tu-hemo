@@ -9,10 +9,11 @@ namespace Hemo.Models
         {
         }
 
-        public Donator(Guid id, Guid userId, bool isApproved = false)
+        public Donator(Guid id, Guid userId, User user, bool isApproved = false)
         {
             this.Id = id;
             this.UserId = userId;
+            this.User = user;
             this.IsApproved = isApproved;
         }
 
@@ -21,7 +22,7 @@ namespace Hemo.Models
 
         public Guid UserId { get; set; }
 
-        public User User { get; set; }
+        public virtual User User { get; set; }
 
         public bool IsApproved { get; set; }
     }
