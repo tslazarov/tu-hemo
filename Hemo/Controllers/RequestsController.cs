@@ -138,22 +138,25 @@ namespace Hemo.Controllers
 
                     foreach (var request in query)
                     {
-                        User requestUser = this.usersManager.GetItem(request.OwnerId) as User;
+                        User requestUser = this.usersManager.GetItem(request.OwnerId ?? Guid.Empty) as User;
 
-                        requestsListViewModel.Add(new RequestUserListViewModel()
+                        if(requestUser != null)
                         {
-                            Id = request.Id,
-                            Date = request.Date,
-                            RequestedBloodQuantity = request.RequestedBloodQuantityInMl,
-                            BloodType = request.RequestedBloodType,
-                            Address = request.Address,
-                            Latitude = request.Latitude,
-                            Longitude = request.Longitude,
-                            Name = string.Format("{0} {1}", requestUser.FirstName, requestUser.LastName),
-                            Email = requestUser.Email,
-                            PhoneNumber = requestUser.PhoneNumber,
-                            Image = requestUser.Image
-                        });
+                            requestsListViewModel.Add(new RequestUserListViewModel()
+                            {
+                                Id = request.Id,
+                                Date = request.Date,
+                                RequestedBloodQuantity = request.RequestedBloodQuantityInMl,
+                                BloodType = request.RequestedBloodType,
+                                Address = request.Address,
+                                Latitude = request.Latitude,
+                                Longitude = request.Longitude,
+                                Name = string.Format("{0} {1}", requestUser.FirstName, requestUser.LastName),
+                                Email = requestUser.Email,
+                                PhoneNumber = requestUser.PhoneNumber,
+                                Image = requestUser.Image
+                            });
+                        }
                     }
                 }
             }
@@ -193,7 +196,7 @@ namespace Hemo.Controllers
                         requestViewModel.IsSigned = true;
                     }
 
-                    User owner = this.usersManager.GetItem(request.OwnerId) as User;
+                    User owner = this.usersManager.GetItem(request.OwnerId ?? Guid.Empty) as User;
 
                     if(owner != null)
                     {
@@ -308,6 +311,47 @@ namespace Hemo.Controllers
             HttpResponseMessage resp = new HttpResponseMessage();
 
             resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsSuccessful = isEdited }));
+            resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            return resp;
+        }
+
+        // PUT api/requests/delete
+        [Authorize]
+        [AcceptVerbs("PUT")]
+        [HttpPut]
+        [Route("api/requests/delete")]
+        public HttpResponseMessage Delete(RequestsDeleteModel model)
+        {
+            bool isDeleted = false;
+
+            IEnumerable<User> users = this.usersManager.GetItems() as IEnumerable<User>;
+            IEnumerable<Claim> claims = (HttpContext.Current.User as ClaimsPrincipal).Claims;
+
+            string userEmail = claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(userEmail))
+            {
+                User user = users.Where(u => u.Email == userEmail).FirstOrDefault();
+
+                if (user != null)
+                {
+                    DonationsRequest request = this.requestsManager.GetItem(model.Id) as DonationsRequest;
+
+                    user.DonationsRequests.Remove(request);
+                    this.usersManager.UpdateItem(user);
+                    this.usersManager.SaveChanges();
+
+                    this.requestsManager.DeleteItem(request);
+                    this.requestsManager.SaveChanges();
+
+                    isDeleted = true;
+                }
+            }
+
+            HttpResponseMessage resp = new HttpResponseMessage();
+
+            resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsSuccessful = isDeleted }));
             resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             return resp;

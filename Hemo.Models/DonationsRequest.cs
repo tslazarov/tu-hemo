@@ -31,10 +31,8 @@ namespace Hemo.Models
         [Key]
         public Guid Id { get; set; }
 
-        [Required]
-        public Guid OwnerId { get; set; }
+        public Guid? OwnerId { get; set; }
 
-        [Required]
         public virtual User Owner { get; set; }
 
         [Required]
