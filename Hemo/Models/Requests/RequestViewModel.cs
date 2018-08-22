@@ -37,5 +37,8 @@ namespace Hemo.Models.Requests
 
         [JsonProperty("requestedBloodQuantity")]
         public int RequestedBloodQuantityInMl { get; set; }
+
+        [JsonProperty("donators")]
+        public IList<RequestDonatorViewModel> Donators { get; set; }
     }
 }

@@ -217,6 +217,21 @@ namespace Hemo.Controllers
                     requestViewModel.Longitude = request.Longitude;
                     requestViewModel.RequestedBloodQuantityInMl = request.RequestedBloodQuantityInMl;
                     requestViewModel.RequestedBloodType = request.RequestedBloodType;
+
+                    IList<RequestDonatorViewModel> donatorsList = new List<RequestDonatorViewModel>();
+
+                    foreach (var donator in request.Donators)
+                    {
+                        donatorsList.Add(new RequestDonatorViewModel()
+                        {
+                            Id = donator.User.Id,
+                            Name = string.Format("{0} {1}", donator.User.FirstName, donator.User.LastName),
+                            BloodType = donator.User.BloodType,
+                            IsApproved = donator.IsApproved
+                        });
+                    }
+
+                    requestViewModel.Donators = donatorsList;
                 }
             }
 
