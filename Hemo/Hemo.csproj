@@ -152,6 +152,7 @@
     <Compile Include="Assembly\IWebAssembly.cs" />
     <Compile Include="Attributes\AuthorizeAttribute.cs" />
     <Compile Include="AuthorizationServerProvider.cs" />
+    <Compile Include="Controllers\DonationsCentersController.cs" />
     <Compile Include="Controllers\RequestsController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -160,6 +161,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\DonationsCenters\DonationsCentersListViewModel.cs" />
+    <Compile Include="Models\DonationsCenters\DonationsCentersViewModel.cs" />
     <Compile Include="Models\Requests\RequestRemoveDonatorModel.cs" />
     <Compile Include="Models\Requests\RequestAddDonatorModel.cs" />
     <Compile Include="Models\Requests\RequestOwnerViewModel.cs" />
