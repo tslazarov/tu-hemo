@@ -61,7 +61,7 @@ namespace Hemo.Controllers
 
             IEnumerable<User> users = this.usersManager.GetItems() as IEnumerable<User>;
 
-            if(users != null)
+            if (users != null)
             {
                 resp.Content = new StringContent(JsonConvert.SerializeObject(users.Any(u => u.Email == model.Email)));
                 resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
@@ -112,11 +112,11 @@ namespace Hemo.Controllers
                 user.PhoneNumber = model.PhoneNumber;
                 user.BloodType = (BloodType)model.BloodType;
 
-                if(model.PreferredLanguage == "en")
+                if (model.PreferredLanguage == "en")
                 {
                     user.PreferredLanguage = PreferredLanguage.English;
                 }
-                else if(model.PreferredLanguage == "bg")
+                else if (model.PreferredLanguage == "bg")
                 {
                     user.PreferredLanguage = PreferredLanguage.Bulgarian;
                 }
@@ -158,7 +158,7 @@ namespace Hemo.Controllers
 
                 HttpStatusCode status = sender.SendMessage("support@hemo.com", "Hemo Support", model.Email, "[Hemo] Password Reset", plainText, htmlText);
 
-                if(status == HttpStatusCode.Accepted)
+                if (status == HttpStatusCode.Accepted)
                 {
                     user.ResetCode = randomString;
 
@@ -184,16 +184,16 @@ namespace Hemo.Controllers
 
             UsersBasicProfileViewModel viewModel = new UsersBasicProfileViewModel();
 
-            if(user !=null)
+            if (user != null)
             {
                 foreach (Claim claim in user.Claims)
                 {
-                    if(claim.Type == ClaimTypes.Email)
+                    if (claim.Type == ClaimTypes.Email)
                     {
                         viewModel.Email = claim.Value;
 
                     }
-                    else if(claim.Type == ClaimTypes.Name)
+                    else if (claim.Type == ClaimTypes.Name)
                     {
                         viewModel.Name = claim.Value;
                     }
@@ -203,12 +203,12 @@ namespace Hemo.Controllers
 
                 User hemoUser = users.Where(u => u.Email == viewModel.Email).FirstOrDefault();
 
-                if(hemoUser != null)
+                if (hemoUser != null)
                 {
                     viewModel.ProfileImage = hemoUser.Image;
                     viewModel.IsExternal = hemoUser.IsExternal;
                 }
-                
+
             }
 
             HttpResponseMessage resp = new HttpResponseMessage();
@@ -294,7 +294,7 @@ namespace Hemo.Controllers
                     resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 }
             }
-            
+
 
             return resp;
         }
@@ -324,6 +324,36 @@ namespace Hemo.Controllers
                 {
                     viewModel.PreferredLanguage = (int)hemoUser.PreferredLanguage;
                 }
+            }
+
+            HttpResponseMessage resp = new HttpResponseMessage();
+
+            resp.Content = new StringContent(JsonConvert.SerializeObject(viewModel));
+            resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            return resp;
+        }
+
+        // GET api/users/{id}
+        [Authorize]
+        [AcceptVerbs("GET")]
+        [HttpGet]
+        [Route("api/users/{id}")]
+        public HttpResponseMessage GetUser(Guid id)
+        {
+            UsersFullProfileViewModel viewModel = new UsersFullProfileViewModel();
+
+            User user = ((IManager)this.usersManager).GetItem(id) as User;
+
+            if (user != null)
+            {
+                viewModel.Email = user.Email;
+                viewModel.FirstName = user.FirstName;
+                viewModel.LastName = user.LastName;
+                viewModel.PhoneNumber = user.PhoneNumber;
+                viewModel.Age = user.Age;
+                viewModel.BloodType = (int)user.BloodType;
+                viewModel.ProfileImage = user.Image;
             }
 
             HttpResponseMessage resp = new HttpResponseMessage();
