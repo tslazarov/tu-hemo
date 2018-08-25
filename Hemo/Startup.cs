@@ -1,14 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Web.Http;
-using Hemo.App_Start;
-using Hemo.Data.Contracts;
-using Microsoft.Owin;
+﻿using Microsoft.Owin;
 using Microsoft.Owin.Cors;
 using Microsoft.Owin.Security.OAuth;
-using Ninject;
-using Ninject.Web.Common;
 using Owin;
+using System;
+using System.Threading.Tasks;
+using System.Web.Http;
 
 [assembly: OwinStartup(typeof(Hemo.Startup))]
 

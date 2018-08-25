@@ -155,7 +155,7 @@
     <Compile Include="Controllers\DonationsCentersController.cs" />
     <Compile Include="Controllers\RequestsController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
-    <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Controllers\TrackingsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Extensions\OwinRequestExtensions.cs" />
     <Compile Include="Global.asax.cs">
@@ -181,6 +181,7 @@
     <Compile Include="Models\Settings\ChangeGeneralResponseViewModel.cs" />
     <Compile Include="Models\Settings\ChangePasswordModel.cs" />
     <Compile Include="Models\Settings\DeleteAccountModel.cs" />
+    <Compile Include="Models\Trackings\TrackingsViewModel.cs" />
     <Compile Include="Models\Users\FacebookModel.cs" />
     <Compile Include="Models\Users\FacebookPictureModel.cs" />
     <Compile Include="Models\Users\PreferredLanguageViewModel.cs" />

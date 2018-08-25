@@ -3,8 +3,6 @@ using Hemo.Data.Contracts;
 using Hemo.Data.Factories;
 using Hemo.Models;
 using Hemo.Models.DonationsCenters;
-using Hemo.Models.Requests;
-using Hemo.Models.Settings;
 using Hemo.Utilities;
 using Newtonsoft.Json;
 using System;
@@ -12,8 +10,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Security.Claims;
-using System.Web;
 using System.Web.Http;
 
 namespace Hemo.Controllers
@@ -62,7 +58,7 @@ namespace Hemo.Controllers
             query = query.Skip(skip).Take(take);
 
 
-            foreach (var center in query)
+            foreach (DonationsCenter center in query)
             {
                 donationsCentersListViewModel.Add(new DonationsCentersListViewModel()
                 {

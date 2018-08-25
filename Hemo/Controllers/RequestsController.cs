@@ -75,7 +75,7 @@ namespace Hemo.Controllers
 
                     IEnumerable<DonationsRequest> query = requests.Where(r => r.OwnerId == user.Id).Skip(skip).Take(take);
 
-                    foreach (var request in query)
+                    foreach (DonationsRequest request in query)
                     {
                         requestsListViewModel.Add(new RequestListViewModel() {
                             Id = request.Id,
@@ -136,7 +136,7 @@ namespace Hemo.Controllers
                     query = query.Skip(skip).Take(take).OrderByDescending(r => r.Date);
 
 
-                    foreach (var request in query)
+                    foreach (DonationsRequest request in query)
                     {
                         User requestUser = this.usersManager.GetItem(request.OwnerId ?? Guid.Empty) as User;
 
@@ -220,7 +220,7 @@ namespace Hemo.Controllers
 
                     IList<RequestDonatorViewModel> donatorsList = new List<RequestDonatorViewModel>();
 
-                    foreach (var donator in request.Donators)
+                    foreach (Donator donator in request.Donators)
                     {
                         donatorsList.Add(new RequestDonatorViewModel()
                         {

@@ -1,19 +1,12 @@
 ﻿using Microsoft.Owin;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace Hemo.Extensions
 {
     public static class OwinRequestExtensions
     {
-        /// <summary>
-        /// Gets the combined request parameters from the form body, query string, and request headers.
-        /// </summary>
-        /// <param name="request">Owin request.</param>
-        /// <returns>Dictionary of combined form body, query string, and request headers.</returns>
         public static Dictionary<string, string> GetRequestParameters(this IOwinRequest request)
         {
             Dictionary<string,string> bodyParameters = request.GetBodyParameters();
@@ -27,11 +20,6 @@ namespace Hemo.Extensions
             return bodyParameters;
         }
 
-        /// <summary>
-        /// Gets the query string request parameters.
-        /// </summary>
-        /// <param name="request">Owin Request.</param>
-        /// <returns>Dictionary of query string parameters.</returns>
         public static Dictionary<string, string> GetQueryParameters(this IOwinRequest request)
         {
             Dictionary<string, string> dictionary = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase);
@@ -46,11 +34,6 @@ namespace Hemo.Extensions
             return dictionary;
         }
 
-        /// <summary>
-        /// Gets the form body request parameters.
-        /// </summary>
-        /// <param name="request">Owin Request.</param>
-        /// <returns>Dictionary of form body parameters.</returns>
         public static Dictionary<string, string> GetBodyParameters(this IOwinRequest request)
         {
             Dictionary<string, string> dictionary = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase);
@@ -69,11 +52,6 @@ namespace Hemo.Extensions
             return dictionary;
         }
 
-        /// <summary>
-        /// Gets the header request parameters.
-        /// </summary>
-        /// <param name="request">Owin Request.</param>
-        /// <returns>Dictionary of header parameters.</returns>
         public static Dictionary<string, string> GetHeaderParameters(this IOwinRequest request)
         {
             Dictionary<string, string> dictionary = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase);
