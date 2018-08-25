@@ -163,6 +163,8 @@
     </Compile>
     <Compile Include="Models\DonationsCenters\DonationsCentersListViewModel.cs" />
     <Compile Include="Models\DonationsCenters\DonationsCentersViewModel.cs" />
+    <Compile Include="Models\Requests\RequestDisconfirmDonatorModel.cs" />
+    <Compile Include="Models\Requests\RequestConfirmDonatorModel.cs" />
     <Compile Include="Models\Requests\RequestDonatorViewModel.cs" />
     <Compile Include="Models\Requests\RequestRemoveDonatorModel.cs" />
     <Compile Include="Models\Requests\RequestAddDonatorModel.cs" />

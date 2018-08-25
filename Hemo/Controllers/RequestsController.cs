@@ -462,5 +462,76 @@ namespace Hemo.Controllers
 
             return resp;
         }
+
+        // PUT api/requests/confirmDonator
+        [Authorize]
+        [AcceptVerbs("PUT")]
+        [HttpPost]
+        [Route("api/requests/confirmDonator")]
+        public HttpResponseMessage ConfirmDonatorInRequest(RequestConfirmDonatorModel model)
+        {
+            bool isConfirmed = false;
+
+ 
+            DonationsRequest request = this.requestsManager.GetItem(model.RequestId) as DonationsRequest;
+
+            if(request != null)
+            {
+                Donator donator = request.Donators.FirstOrDefault(i => i.UserId == model.UserId) as Donator;
+
+                if (donator != null)
+                {
+                    donator.IsApproved = true;
+
+                    this.donatorsManager.UpdateItem(donator);
+                    this.donatorsManager.SaveChanges();
+
+                    isConfirmed = true;
+                }
+            }
+
+
+            HttpResponseMessage resp = new HttpResponseMessage();
+
+            resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsSuccessful = isConfirmed }));
+            resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            return resp;
+        }
+
+        // PUT api/requests/disconfirmDonator
+        [Authorize]
+        [AcceptVerbs("PUT")]
+        [HttpPost]
+        [Route("api/requests/disconfirmDonator")]
+        public HttpResponseMessage DisconfirmDonatorInRequest(RequestDisconfirmDonatorModel model)
+        {
+            bool isCanceled = false;
+
+
+            DonationsRequest request = this.requestsManager.GetItem(model.RequestId) as DonationsRequest;
+
+            if (request != null)
+            {
+                Donator donator = request.Donators.FirstOrDefault(i => i.UserId == model.UserId) as Donator;
+
+                if (donator != null)
+                {
+                    donator.IsApproved = false;
+
+                    this.donatorsManager.UpdateItem(donator);
+                    this.donatorsManager.SaveChanges();
+
+                    isCanceled = true;
+                }
+            }
+
+            HttpResponseMessage resp = new HttpResponseMessage();
+
+            resp.Content = new StringContent(JsonConvert.SerializeObject(new ChangeGeneralResponseViewModel() { IsSuccessful = isCanceled }));
+            resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            return resp;
+        }
     }
 }
