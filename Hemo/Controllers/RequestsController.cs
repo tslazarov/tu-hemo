@@ -373,7 +373,7 @@ namespace Hemo.Controllers
         }
 
 
-        // POST api/requests/addUsers
+        // POST api/requests/addDonator
         [Authorize]
         [AcceptVerbs("POST")]
         [HttpPost]

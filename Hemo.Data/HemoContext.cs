@@ -19,8 +19,6 @@ namespace Hemo.Data
 
         public virtual IDbSet<Donator> Donators { get; set; }
 
-        public virtual IDbSet<UsersDonationTracking> UsersDonationTrackings { get; set; }
-
         public static DbContext Create()
         {
             return new HemoContext();

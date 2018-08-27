@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Hemo.Models.DonationsCenter" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAGAAAAAIAAAIQAQAAAIAABACAAAAAAAAAAA=</HashCode>
+      <FileName>DonationsCenter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Hemo.Models.DonationsRequest" BaseTypeListCollapsed="true">
+    <Position X="4" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAACIAEAAAAAIAAAIAAAgAAJAIAADgAAAAAAAAAA=</HashCode>
+      <FileName>DonationsRequest.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Hemo.Models.Donator" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAAAAAAAAAAAAAAAAgAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Donator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Hemo.Models.User" BaseTypeListCollapsed="true">
+    <Position X="7.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABCAEAIACQACAAAAEABQAAgAAAAADAAAAAIIAAAAAg=</HashCode>
+      <FileName>User.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.225" />
+  </Class>
+  <Class Name="Hemo.Models.UsersDonationTracking" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAALAAAAAAAAAAAAAAAAAAgAAAABEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UsersDonationTracking.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.Object" Collapsed="true">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Interface Name="Hemo.Models.Assembly.IModelsAssembly" Collapsed="true">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assembly\IModelsAssembly.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Hemo.Models.IDataItem" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IDataItem.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="Hemo.Models.BloodType">
+    <Position X="5.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAQhAAAAAAQAAABAAIAAAAAAAAg=</HashCode>
+      <FileName>BloodType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Hemo.Models.PreferredLanguage">
+    <Position X="0.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>PreferredLanguage.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

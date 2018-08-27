@@ -32,11 +32,11 @@ namespace Hemo.Controllers
             this.donationsCentersFactory = donationsCentersFactory;
         }
 
-        // GET api/centers/full
+        // GET api/centers
         [Authorize]
         [AcceptVerbs("GET")]
         [HttpGet]
-        [Route("api/centers/full")]
+        [Route("api/centers")]
         public HttpResponseMessage GetFullMedCenters(int skip = 0, int take = 0, decimal latitude = 0, decimal longitude = 0, bool inRange = false, string city = "", string country = "")
         {
             IList<DonationsCentersListViewModel> donationsCentersListViewModel = new List<DonationsCentersListViewModel>();

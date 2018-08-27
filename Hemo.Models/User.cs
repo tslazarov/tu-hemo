@@ -61,8 +61,6 @@ namespace Hemo.Models
 
         public string UserExternalId { get; set; }
 
-        public virtual UsersDonationTracking Tracking { get; set; }
-
         public virtual ICollection<DonationsRequest> DonationsRequests
         {
             get

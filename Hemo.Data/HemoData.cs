@@ -17,14 +17,12 @@ namespace Hemo.Data
         private readonly IEfRepository<DonationsCenter> donationsCentersRepository;
         private readonly IEfRepository<DonationsRequest> donationsRequestsRepository;
         private readonly IEfRepository<Donator> donatorsRepository;
-        private readonly IEfRepository<UsersDonationTracking> usersDonationTrackingsRepository;
 
         public HemoData(IContext dbContext,
                         IEfRepository<User> usersRepository,
                         IEfRepository<DonationsCenter> donationsCentersRepository,
                         IEfRepository<DonationsRequest> donationsRequestsRepository,
-                        IEfRepository<Donator> donatorsRepository,
-                        IEfRepository<UsersDonationTracking> usersDonationTrackingsRepository)
+                        IEfRepository<Donator> donatorsRepository)
         {
             Guard.WhenArgument<IContext>(dbContext, "Database context cannot be null.")
                 .IsNull()
@@ -46,16 +44,11 @@ namespace Hemo.Data
                 .IsNull()
                 .Throw();
 
-            Guard.WhenArgument<IEfRepository<UsersDonationTracking>>(usersDonationTrackingsRepository, "Users donation trackings repository cannot be null.")
-                .IsNull()
-                .Throw();
-
             this.dbContext = dbContext;
             this.usersRepository = usersRepository;
             this.donationsCentersRepository = donationsCentersRepository;
             this.donationsRequestsRepository = donationsRequestsRepository;
             this.donatorsRepository = donatorsRepository;
-            this.usersDonationTrackingsRepository = usersDonationTrackingsRepository;
         }
 
         public IEfRepository<User> UsersRepository
@@ -87,14 +80,6 @@ namespace Hemo.Data
             get
             {
                 return this.donatorsRepository;
-            }
-        }
-
-        public IEfRepository<UsersDonationTracking> UsersDonationTrackingsRepository
-        {
-            get
-            {
-                return this.usersDonationTrackingsRepository;
             }
         }
 

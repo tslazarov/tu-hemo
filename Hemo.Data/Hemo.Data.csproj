@@ -58,7 +58,6 @@
     <Compile Include="EfRepository.cs" />
     <Compile Include="Factories\IDonationsCentersFactory.cs" />
     <Compile Include="Factories\IDonatorsFactory.cs" />
-    <Compile Include="Factories\IUsersDonationTrackingsFactory.cs" />
     <Compile Include="Factories\IUsersFactory.cs" />
     <Compile Include="Factories\IDonationsRequestsFactory.cs" />
     <Compile Include="HemoContext.cs" />
@@ -68,9 +67,7 @@
     <Compile Include="Contracts\IDonationsCentersManager.cs" />
     <Compile Include="Contracts\IDonationsRequestsManager.cs" />
     <Compile Include="Contracts\IDonatorsManager.cs" />
-    <Compile Include="Contracts\IUsersDonationTrackingsManager.cs" />
     <Compile Include="Contracts\IUsersManager.cs" />
-    <Compile Include="Managers\UsersDonationTrackingsManager.cs" />
     <Compile Include="Managers\DonatorsManager.cs" />
     <Compile Include="Managers\UsersManager.cs" />
     <Compile Include="Migrations\Configuration.cs" />

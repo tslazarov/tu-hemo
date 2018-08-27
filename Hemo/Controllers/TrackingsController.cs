@@ -4,6 +4,7 @@ using Hemo.Models;
 using Hemo.Models.Requests;
 using Hemo.Models.Trackings;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -17,16 +18,12 @@ namespace Hemo.Controllers
     public class TrackingsController : ApiController
     {
         private IManager usersManager;
-        private IManager trackingManager;
         private IManager requestsManager;
 
 
-        public TrackingsController(IUsersManager usersManager, IUsersDonationTrackingsManager trackingManager, IDonationsRequestsManager requestsManager)
+        public TrackingsController(IUsersManager usersManager, IDonationsRequestsManager requestsManager)
         {
             Guard.WhenArgument<IUsersManager>(usersManager, "Users manager cannot be null.")
-                .IsNull()
-                .Throw();
-            Guard.WhenArgument<IUsersDonationTrackingsManager>(trackingManager, "Trackingmanager cannot be null.")
                 .IsNull()
                 .Throw();
             Guard.WhenArgument<IDonationsRequestsManager>(requestsManager, "Requests manager cannot be null.")
@@ -34,7 +31,6 @@ namespace Hemo.Controllers
                 .Throw();
 
             this.usersManager = usersManager as IManager;
-            this.trackingManager = trackingManager as IManager;
             this.requestsManager = requestsManager as IManager;
         }
 
@@ -46,6 +42,16 @@ namespace Hemo.Controllers
         public HttpResponseMessage GetTracking()
         {
             TrackingsViewModel trackingViewModel = new TrackingsViewModel();
+            trackingViewModel.Locations = new Dictionary<string, int>();
+
+            var startingYear = DateTime.Now.Year - 4;
+
+            trackingViewModel.AnnualDonations = new Dictionary<int, int>();
+            trackingViewModel.AnnualDonations.Add(startingYear, 0);
+            trackingViewModel.AnnualDonations.Add(startingYear + 1, 0);
+            trackingViewModel.AnnualDonations.Add(startingYear + 2, 0);
+            trackingViewModel.AnnualDonations.Add(startingYear + 3, 0);
+            trackingViewModel.AnnualDonations.Add(startingYear + 4, 0);
 
             IEnumerable<User> users = this.usersManager.GetItems() as IEnumerable<User>;
             IEnumerable<Claim> claims = (HttpContext.Current.User as ClaimsPrincipal).Claims;
@@ -58,30 +64,36 @@ namespace Hemo.Controllers
 
                 if (user != null)
                 {
-                    IEnumerable<UsersDonationTracking> trackings = this.trackingManager.GetItems() as IEnumerable<UsersDonationTracking>;
-
-                    UsersDonationTracking tracking = trackings.FirstOrDefault(t => t.UserId == user.Id);
-
-                    if(tracking != null)
-                    {
-                        trackingViewModel.LastDonation = tracking.LastDonation;
-                        trackingViewModel.CurrentAnnualDonations = tracking.CurrentAnnualDonations;
-                    }
-
                     IEnumerable<DonationsRequest> requests = (this.requestsManager.GetItems() as IEnumerable<DonationsRequest>).OrderByDescending(r => r.Date);
 
                     foreach (DonationsRequest request in requests)
                     {
                         if (request.Donators.Any(r => r.UserId == user.Id && r.IsApproved))
                         {
-                            trackingViewModel.LastRequestDonation = new RequestListViewModel()
+                            if(trackingViewModel.LatestRequestDonation == null)
                             {
-                                Id = request.Id,
-                                Date = request.Date,
-                                RequestedBloodQuantity = request.RequestedBloodQuantityInMl,
-                                BloodType = request.RequestedBloodType
-                            };
-                            break;
+                                trackingViewModel.LatestRequestDonation = new RequestListViewModel()
+                                {
+                                    Id = request.Id,
+                                    Date = request.Date,
+                                    RequestedBloodQuantity = request.RequestedBloodQuantityInMl,
+                                    BloodType = request.RequestedBloodType
+                                };
+                            }
+
+                            if (trackingViewModel.Locations.ContainsKey(request.City))
+                            {
+                                trackingViewModel.Locations[request.City] += 1;
+                            }
+                            else
+                            {
+                                trackingViewModel.Locations.Add(request.City, 1);
+                            }
+
+                            if (trackingViewModel.AnnualDonations.ContainsKey(request.Date.Year))
+                            {
+                                trackingViewModel.AnnualDonations[request.Date.Year] += 1;
+                            }
                         }
                     }
                 }
@@ -100,7 +112,7 @@ namespace Hemo.Controllers
         [AcceptVerbs("GET")]
         [HttpGet]
         [Route("api/trackings/history")]
-        public HttpResponseMessage GetHistory()
+        public HttpResponseMessage GetHistory(int skip, int take)
         {
             IList<RequestListViewModel> requestsListViewModel = new List<RequestListViewModel>();
 
@@ -108,6 +120,8 @@ namespace Hemo.Controllers
             IEnumerable<Claim> claims = (HttpContext.Current.User as ClaimsPrincipal).Claims;
 
             string userEmail = claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).FirstOrDefault();
+
+            IEnumerable<RequestListViewModel> finalQuery = new List<RequestListViewModel>();
 
             if (!string.IsNullOrEmpty(userEmail))
             {
@@ -130,12 +144,14 @@ namespace Hemo.Controllers
                             });
                         }
                     }
+
+                    finalQuery = requestsListViewModel.OrderBy(i => i.Date).Skip(skip).Take(take); 
                 }
             }
 
             HttpResponseMessage resp = new HttpResponseMessage();
 
-            resp.Content = new StringContent(JsonConvert.SerializeObject(requestsListViewModel));
+            resp.Content = new StringContent(JsonConvert.SerializeObject(finalQuery));
             resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             return resp;

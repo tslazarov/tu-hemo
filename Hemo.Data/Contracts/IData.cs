@@ -12,8 +12,6 @@ namespace Hemo.Data.Contracts
 
         IEfRepository<Donator> DonatorsRepository { get; }
 
-        IEfRepository<UsersDonationTracking> UsersDonationTrackingsRepository { get; }
-
         void SaveChanges();
     }
 }

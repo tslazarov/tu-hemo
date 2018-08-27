@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Hemo.Data.EfRepository&lt;T&gt;" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAQAAAAAAAAEAAEAACIgAAAAAAIA=</HashCode>
+      <FileName>EfRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Hemo.Data.HemoContext" BaseTypeListCollapsed="true">
+    <Position X="11" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAIAAAAAAgEAEAAGAAACAAAAAAAAA=</HashCode>
+      <FileName>HemoContext.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Hemo.Data.HemoData" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAIAQAAAAAAAAAAAAQAAAAIgAAACIAAABQCAAAEAAAA=</HashCode>
+      <FileName>HemoData.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Hemo.Data.Managers.DonationsCentersManager" BaseTypeListCollapsed="true">
+    <Position X="9.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gABAQAAAAAAAAEAAAQAAAAAAAAAAAgAAAAAQAAAAAAA=</HashCode>
+      <FileName>Managers\DonationsCentersManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Hemo.Data.Managers.DonationsRequestsManager" BaseTypeListCollapsed="true">
+    <Position X="4" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gABAQAAAAAAAAEAAAQAAAAAAAAAAAgAAAAAQAAAAAAA=</HashCode>
+      <FileName>Managers\DonationsRequestsManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Hemo.Data.Managers.DonatorsManager" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gABAQAAAAAAAAEAAAQAAAAAAAAAAAgAAAAAQAAAAAAA=</HashCode>
+      <FileName>Managers\DonatorsManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Hemo.Data.Managers.UsersDonationTrackingsManager" BaseTypeListCollapsed="true">
+    <Position X="7.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gABAQAAAAAAAAEAAAQAAAAAAAAAAAgAAAAAQAAAAAAA=</HashCode>
+      <FileName>Managers\UsersDonationTrackingsManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Hemo.Data.Managers.UsersManager" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gABAQAAAAAAAAEAAAQAAAAAAAAAAAgAAAAAQAAAAAAA=</HashCode>
+      <FileName>Managers\UsersManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Hemo.Data.Migrations.Configuration">
+    <Position X="2.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Migrations\Configuration.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.Object" Collapsed="true">
+    <Position X="4" Y="7.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Data.Entity.DbContext" Collapsed="true">
+    <Position X="11" Y="6.25" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="Hemo.Data.Assembly.IDataAssembly" Collapsed="true">
+    <Position X="2.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assembly\IDataAssembly.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Hemo.Data.Contracts.IContext">
+    <Position X="12.75" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAQACAAAAAABAAAIAAAAAAgAAAAACAAACAAAAAAAAA=</HashCode>
+      <FileName>Contracts\IContext.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Hemo.Data.Contracts.IData" Collapsed="true">
+    <Position X="0.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAIAAAAAAAAAAAAAAAAAAAAgAAACAAAABQAAAAAAAAA=</HashCode>
+      <FileName>Contracts\IData.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Hemo.Data.Contracts.IDonationsCentersManager" Collapsed="true">
+    <Position X="9.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Contracts\IDonationsCentersManager.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Hemo.Data.Contracts.IDonationsRequestsManager" Collapsed="true">
+    <Position X="4" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Contracts\IDonationsRequestsManager.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Hemo.Data.Contracts.IDonatorsManager" Collapsed="true">
+    <Position X="5.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Contracts\IDonatorsManager.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Hemo.Data.Contracts.IEfRepository&lt;T&gt;" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAEAAEAAAIAAAAAAAIA=</HashCode>
+      <FileName>Contracts\IEfRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Hemo.Data.Contracts.IManager">
+    <Position X="4" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gABAQAAAAAAAAEAAAQAAAAAAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>Contracts\IManager.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Hemo.Data.Contracts.IUsersDonationTrackingsManager" Collapsed="true">
+    <Position X="7.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Contracts\IUsersDonationTrackingsManager.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Hemo.Data.Contracts.IUsersManager" Collapsed="true">
+    <Position X="2.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Contracts\IUsersManager.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Hemo.Data.Factories.IDonationsCentersFactory">
+    <Position X="5.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Factories\IDonationsCentersFactory.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Hemo.Data.Factories.IDonationsRequestsFactory">
+    <Position X="7.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Factories\IDonationsRequestsFactory.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Hemo.Data.Factories.IDonatorsFactory">
+    <Position X="9.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Factories\IDonatorsFactory.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Hemo.Data.Factories.IUsersDonationTrackingsFactory">
+    <Position X="5.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Factories\IUsersDonationTrackingsFactory.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Hemo.Data.Factories.IUsersFactory">
+    <Position X="7.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Factories\IUsersFactory.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -22,21 +22,18 @@ namespace Hemo.App_Start.NinjectModules
             this.Bind<IDonationsCentersFactory>().ToFactory();
             this.Bind<IDonationsRequestsFactory>().ToFactory();
             this.Bind<IDonatorsFactory>().ToFactory();
-            this.Bind<IUsersDonationTrackingsFactory>().ToFactory();
             this.Bind<IUsersFactory>().ToFactory();
 
             this.Rebind<IUsersManager>().To<UsersManager>().InRequestScope();
             this.Rebind<IDonationsCentersManager>().To<DonationsCentersManager>().InRequestScope();
             this.Rebind<IDonationsRequestsManager>().To<DonationsRequestsManager>().InRequestScope();
             this.Rebind<IDonatorsManager>().To<DonatorsManager>().InRequestScope();
-            this.Rebind<IUsersDonationTrackingsManager>().To<UsersDonationTrackingsManager>().InRequestScope();
 
 
             this.Rebind<IEfRepository<User>>().To<EfRepository<User>>().InRequestScope();
             this.Rebind<IEfRepository<DonationsCenter>>().To<EfRepository<DonationsCenter>>().InRequestScope();
             this.Rebind<IEfRepository<DonationsRequest>>().To<EfRepository<DonationsRequest>>().InRequestScope();
             this.Rebind<IEfRepository<Donator>>().To<EfRepository<Donator>>().InRequestScope();
-            this.Rebind<IEfRepository<UsersDonationTracking>>().To<EfRepository<UsersDonationTracking>>().InRequestScope();
         }
     }
 }

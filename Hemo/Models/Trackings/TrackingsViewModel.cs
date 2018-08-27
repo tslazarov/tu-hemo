@@ -1,18 +1,19 @@
 ﻿using Hemo.Models.Requests;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace Hemo.Models.Trackings
 {
     public class TrackingsViewModel
     {
-        [JsonProperty("lastDonation")]
-        public DateTime? LastDonation { get; set; }
+        [JsonProperty("latestRequestDonation")]
+        public RequestListViewModel LatestRequestDonation { get; set; }
 
-        [JsonProperty("currentAnnualDonations")]
-        public int CurrentAnnualDonations { get; set; }
+        [JsonProperty("locations")]
+        public Dictionary<string, int> Locations { get; set; }
 
-        [JsonProperty("lastRequestDonation")]
-        public RequestListViewModel LastRequestDonation { get; set; }
+        [JsonProperty("annualDonations")]
+        public Dictionary<int, int> AnnualDonations { get; set; }
     }
 }
